@@ -3,5 +3,5 @@ function sum(a, b) {
 }
 
 test('Ritorna i dati clienti delle celle', () => {
-  expect(sum(1,2)).toBe(4)
+  expect(sum(1,2)).toBe(3)
 })
