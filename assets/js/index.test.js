@@ -1,5 +1,7 @@
-import * as tw from "./Global/Thingworx/thingworx_api_module.js"
+function sum(a, b) {
+  return a + b;
+}
 
 test('Ritorna i dati clienti delle celle', () => {
-  expect(tw.service_01_getDryersGeneralInfo('Storci.Thing.Canossa'))
+  expect(sum(1,2)).toBe(4)
 })

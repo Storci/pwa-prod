@@ -26,6 +26,6 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test ../../assets/js/index.test.js
+        run: jest
         #run: npm test
         #run: npm ../../assets/js/index.test.js
