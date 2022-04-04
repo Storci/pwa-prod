@@ -1,7 +1,5 @@
-function sum(a, b) {
-  return a + b;
-}
+import * as tw from "./Global/Thingworx/thingworx_api_module.js"
 
-test('Ritorna i dati clienti delle celle', () => {
-  expect(sum(1,2)).toBe(3)
+test('Ritorna la lista dei clienti', () => {
+  expect(tw.getCustomersList()).not.toBeNull()
 })

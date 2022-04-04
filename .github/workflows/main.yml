@@ -30,5 +30,3 @@ jobs:
 
       - name: Run tests
         run: jest
-        #run: npm test
-        #run: npm ../../assets/js/index.test.js
