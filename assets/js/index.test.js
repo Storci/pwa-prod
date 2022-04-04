@@ -1,4 +1,4 @@
-import createCard from "./Global/Thingworx/thingworx_api_module.js"
+import { createCard } from "./01_Customers.js"
 
 test('Effettua la creazione delle card della pagina 01_Customers', () => {
   tw.getCustomersList()
