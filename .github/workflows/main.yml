@@ -26,4 +26,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
-        run: main.js
+        run: ../../assets/js/index.test.js
