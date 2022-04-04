@@ -1,3 +1,4 @@
+/*
 name: UNIT TEST
 
 # Controls when the workflow will run
@@ -30,3 +31,4 @@ jobs:
 
       - name: Run tests
         run: jest
+*/
