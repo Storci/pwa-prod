@@ -9,32 +9,49 @@ try{
   .then(res => {
     if(JSON.stringify(res) !== '{}'){
       res.array.forEach((item, i) => {
-
+        // Recupera l'url della pagina visualizzata
+        // Effettua uno split dell'url recuperato dividendo la stringa tramite lo /
+        // recupera il nome della pagina
         let pageURL = window.location.href
         pageURL = pageURL.split('\/')
+        let pageName = pageURL[pageURL.length-1]
 
+        // Calcola il numero della linea, somma 1 all'indice del for
         let num = i + 1
+
+        // Recupera l'id dell'elemento accordion della linea.
+        // L'accordion è gia presente nella sidebar, è nascosto tramite la classe d-none
+        // Se un cliente ha una linea, il codice sottostante elimina la classe d-none
         let idacc = '#accordionLine0' + num
-        console.log(idacc)
         $(idacc).removeClass('d-none')
+
+        // Modifica l'href da richiamare quando si preme il pulsante del menu
+        // ref deve passare alla pagina 04_Line.html l'entityName della linea
+        // In questo modo la pagina riesce a recuperare i dati dalla linea corretta
         let href = '04_Line.html?entityName=' + item.entityName
-        console.log(href)
         let idnav = '#nav-line0' + num + '-dashboard'
-        console.log(idnav)
         $(idnav).attr('href', href)
+
+
+        if(pageName == href){
+          $(idnav).addClass('active')
+          $(idnav).attr('href', '#')
+
+          /*
+          accordionButtonClass = 'accordion-button'
+          aria_expanded = "true"
+          panelCollapse = 'accordion-collapse collapse show'
+          */
+        }
+
+
         /*
         let navclass = 'nav-link '
         let href = '04_Line.html?entityName=' + item.entityName
         let accordionButtonClass = 'accordion-button collapsed'
         let aria_expanded = "false"
         let panelCollapse = 'accordion-collapse collapse'
-        if(pageURL[pageURL.length-1] == href){
-          navclass += ' active'
-          href = '#'
-          accordionButtonClass = 'accordion-button'
-          aria_expanded = "true"
-          panelCollapse = 'accordion-collapse collapse show'
-        }
+
 
         let nomeLinea = item.nome_linea
 
