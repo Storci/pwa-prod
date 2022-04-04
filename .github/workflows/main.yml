@@ -1,7 +1,4 @@
-@@ -0,0 +1,36 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: UNIT TEST
 
 # Controls when the workflow will run
 on:
@@ -26,5 +23,5 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
-        run: npm install
+        #run: npm install
         #run: npm ../../assets/js/index.test.js
