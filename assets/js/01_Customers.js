@@ -207,3 +207,5 @@ function getConnectionStatus(customerList){
 		.catch(error => console.error(error))
 	})
 }
+
+export {createCard, getCustomerInfo, getConnectionStatus} 
