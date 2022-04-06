@@ -6,6 +6,9 @@ import * as tw from "./Global/Thingworx/thingworx_api_module.js";
 // baseURL verrà utilizzato come base per il cambio pagina.
 let baseURL = window.location.protocol + "//" + window.location.host;
 let pageURL = window.location.href
+if(window.location.protocol == 'https:'){
+  baseURL += '/pwa'
+}
 
 // Recupera il nome dell'utente da firebase, controlla che sia loggato.
 // Nel caso non fosse loggato richiama la pagina di login
