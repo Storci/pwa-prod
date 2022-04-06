@@ -31,10 +31,11 @@ tw.getUser(user.email)
   // Se non è un utente storci viene reindirizzato alla pagina /Customer/Customer_Info.html.
   if(global_customer.includes("Storci")){
   	// Carica la pagina.
-  	window.location.href = baseURL + "/01_Customers.html";
+  	//window.location.href = baseURL + "/01_Customers.html";
+		console.log(baseURL)
   }else{
   	// Carica la pagina.
-  	window.location.href = baseURL + "/02_Dashboard.html";
+  	//window.location.href = baseURL + "/02_Dashboard.html";
   }
 })
 .catch(error => console.error(error))
