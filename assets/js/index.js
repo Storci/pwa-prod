@@ -32,7 +32,8 @@ tw.getUser(user.email)
   if(global_customer.includes("Storci")){
   	// Carica la pagina.
 		console.log(baseURL + "/01_Customers.html")
-  	window.location.href = baseURL + "/01_Customers.html"
+  	//window.location.href = baseURL + "/01_Customers.html
+		window.location.href = "./01_Customers.html"
   }else{
   	// Carica la pagina.
   	//window.location.href = baseURL + "/02_Dashboard.html";
