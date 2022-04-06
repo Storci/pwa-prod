@@ -5,6 +5,9 @@ import * as tw from "./Global/Thingworx/thingworx_api_module.js"
 // baseURL verrà utilizzato come base per il cambio pagina.
 let baseURL = window.location.protocol + "//" + window.location.host;
 let pageURL = window.location.href
+if(window.location.protocol == 'https:'){
+  baseURL += '/pwa'
+}
 // Dichiara la varibile come JSON
 //let customerList = {}
 // Prova a recuperare l'elenco dei clienti dalla localstorage
@@ -208,4 +211,4 @@ function getConnectionStatus(customerList){
 	})
 }
 
-export {createCard, getCustomerInfo, getConnectionStatus} 
+export {createCard, getCustomerInfo, getConnectionStatus}
