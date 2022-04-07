@@ -1,6 +1,6 @@
 // Carica le funzioni globali
 import * as tw from "./Global/Thingworx/thingworx_api_module.js"
-import * as fb from "./Global/Firebase/firebase_auth_module.ms"
+import * as fb from "./Global/Firebase/firebase_auth_module.js"
 import * as lang from "./Global/Common/Translation.js"
 import * as common from "./Global/Common/commonFunctions.js"
 
@@ -14,7 +14,7 @@ $('.form-control').on('input', function(){
 // Funzione scatenata dalla pressione del pulsante di sign up
 $('#IDButtonSignUp').click(function(){
 
-  
+
 
   let email = $('#IDEmail').val()
   // Controlla che l'email non sia già stata usata
@@ -41,33 +41,32 @@ $('#IDButtonSignUp').click(function(){
 })
 
 document.addEventListener('DOMContentLoaded', () =>{
-//$(document).ready(function () { 
+//$(document).ready(function () {
     var url = "https://restcountries.com/v2/all"
 
+    // Imposta i settings da utilizzare nelle REST API.
+    // Nel campo data vengono inseriti i parametri di ingresso del servizio di TW.
+    let settings = {
+        "url"     : url,
+        "method"  : "GET",
+        "timeout" : 0,
+        "headers" : {},
+        "data": ""
+    }
+    // Ritorna una promise, in questo modo il valore ritorna solamente quando la REST API è conclusa.
 
-        // Imposta i settings da utilizzare nelle REST API.
-        // Nel campo data vengono inseriti i parametri di ingresso del servizio di TW.
-        let settings = {
-            "url"     : url,
-            "method"  : "GET",
-            "timeout" : 0,
-            "headers" : {},
-            "data": "",
+    // Esegue la chiamata REST API.
+    $.ajax(settings).then(response => console.log(response))
+/*
             "success": function(country){
                 let results = '<option value="-1">Please Select a Country or State</option>'
                 for(let i = 0; i < country.length; i++){
-                    
+
                     results += '<option>'+ country[i].name +'</option>'
-                    
+
                 }
                 $("#IDCountries").html(results)
-            }
-        };
-
-        // Ritorna una promise, in questo modo il valore ritorna solamente quando la REST API è conclusa.
-        
-            // Esegue la chiamata REST API.
-            $.ajax(settings).then(response => console.log(response));
+            }*/
 })
 
 // Opzione per generare attraverso un APi tutte le nazione nel mondo
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () =>{
     console.log(data)
     let results = '';
     data.forEach(country => {
-      results += `<option>${country.name}</option>`; 
+      results += `<option>${country.name}</option>`;
         console.log(results)
     });
     selectDropdown.innerHTML = results;
