@@ -40,49 +40,31 @@ $('#IDButtonSignUp').click(function(){
 		.catch(error => console.error(error))
 })
 
-document.addEventListener('DOMContentLoaded', () =>{
-//$(document).ready(function () {
-    var url = "https://restcountries.com/v2/all"
 
-    // Imposta i settings da utilizzare nelle REST API.
-    // Nel campo data vengono inseriti i parametri di ingresso del servizio di TW.
-    let settings = {
-        "url"     : url,
-        "method"  : "GET",
-        "timeout" : 0,
-        "headers" : {},
-        "data": ""
-    }
-    // Ritorna una promise, in questo modo il valore ritorna solamente quando la REST API è conclusa.
+// una chiamata rest per recuperare tutta la lista delle nazione 
+  var url = "https://restcountries.com/v2/all"
 
-    // Esegue la chiamata REST API.
-    $.ajax(settings).then(response => console.log(response))
-/*
+
+        // Imposta i settings da utilizzare nelle REST API.
+        // Nel campo data vengono inseriti i parametri di ingresso del servizio di TW.
+        let settings = {
+            "url"     : url,
+            "method"  : "GET",
+            "timeout" : 0,
+            "headers" : {},
+            "data": "",
             "success": function(country){
                 let results = '<option value="-1">Please Select a Country or State</option>'
                 for(let i = 0; i < country.length; i++){
-
+                    
                     results += '<option>'+ country[i].name +'</option>'
-
+                    
                 }
                 $("#IDCountries").html(results)
-            }*/
-})
+            }
+        };
 
-// Opzione per generare attraverso un APi tutte le nazione nel mondo
-/*document.addEventListener('DOMContentLoaded', () =>{
+        // Ritorna una promise, in questo modo il valore ritorna solamente quando la REST API è conclusa.
 
-  let selectDropdown = document.querySelector('#countries');
-
-  fetch('https://restcountries.com/v2/all').then(res =>{
-    return res.json();
-  }).then(data =>{
-    console.log(data)
-    let results = '';
-    data.forEach(country => {
-      results += `<option>${country.name}</option>`;
-        console.log(results)
-    });
-    selectDropdown.innerHTML = results;
-  })
-})*/
+            // Esegue la chiamata REST API.
+            $.ajax(settings).then(response => console.log(response));

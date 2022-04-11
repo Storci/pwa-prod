@@ -6,7 +6,12 @@ import * as fb from "./Global/Firebase/firebase_auth_module.js"
 // il nome dell'entity permette di recuperare le macchine presenti
 // per un determinato cliente e visualizzarle nella sidebar.
 let entityName = localStorage.getItem('global_entityName')
-
+let customer = localStorage.getItem('global_selected_customer')
+customer = customer.replace(/_/g, ' ')
+$('#id-customer-name').text(customer)
+if(localStorage.getItem('global_customer').includes("Storci")){
+  $('#id-nav-customers-list').removeClass('d-none')
+}
 // Recupera l'url della pagina visualizzata
 // Effettua uno split dell'url recuperato dividendo la stringa tramite lo /
 // recupera il nome della pagina
@@ -27,7 +32,6 @@ fb.onAuthStateChanged()
 // alla pressione del tasto, l'utente viene reindirizzato alla pagina di login
 $('#id-user-logout').click(() => { fb.signOut() })
 
-
 // Recupera i nomi delle macchine installate dal cliente.
 // vengono recuperate sia le celle che le linee.
 tw.service_90_sidebar(entityName)
@@ -43,8 +47,8 @@ tw.service_90_sidebar(entityName)
       let idBtnAccordion         = '#id-btn-accordion-dryers'
       let idCollapsePanel        = '#id-collapse-panel-dryers'
       // link
-      let nav_dashboard_link     = '#id-nav-dashboard-dryer div a'
-      let nav_history_link       = '#id-nav-history-dryer div a'
+      let nav_dashboard_link     = '#id-nav-dashboard-dryer a'
+      let nav_history_link       = '#id-nav-history-dryer a'
 
       // Visualizza il menu delle celle
       $(idAccordion).removeClass('d-none')
@@ -97,16 +101,19 @@ tw.service_90_sidebar(entityName)
         // pages
         let href_dashboard        = '40_line_dashboard.html?entityName=' + res.lines[i-1].entityName
         let href_history          = '41_line_history.html?entityName=' + res.lines[i-1].entityName
+        let href_dough            = '45_line_dough.html?entityName=' + res.lines[i-1].entityName
         // id
         let idAccordion           = '#id-accordion-line-' + i
         let idBtnAccordion        = '#id-btn-accordion-line-' + i
         let idCollapsePanel       = '#id-collapse-panel-line-' + i
         let id_nav_dashboard_line = '#id-nav-dashboard-line-' + i
         let id_nav_history_line   = '#id-nav-history-line-' + i
+        let id_nav_dough_line     = '#id-nav-dough-line-' + i
         // link
         let nav_dashboard_link    = id_nav_dashboard_line + ' a'
         let nav_history_link      = id_nav_history_line + ' a'
-        let span_status           = id_nav_dashboard_line + ' a :last-child'
+        let nav_dough_link        = id_nav_dough_line + ' a'
+        let span_status           = id_nav_dashboard_line + 'div a :last-child'
         // Visualizza il menu delle celle
         $(idAccordion).removeClass('d-none')
         // controlla che la pagina in visualizzazione sia una pagina delle celle (30_*, 31_*, 32_*)
@@ -120,10 +127,13 @@ tw.service_90_sidebar(entityName)
         // se la pagina della dashboard o dello storico
         if(pageName == href_dashboard){ $(nav_dashboard_link).addClass('active') }
         if(pageName == href_history){ $(nav_history_link).addClass('active') }
+        if(pageName == href_dough){ $(nav_dough_link).addClass('active') }
         // effettua modifiche agli elementi sottostanti
         $(nav_dashboard_link).attr('href', href_dashboard)
         $(nav_history_link).attr('href', href_history)
         $(span_status).text(res.lines[i-1].status)
+
+        $(nav_dough_link).attr('href', href_dough)
       }
     }
   }catch(e){ console.error(e) }
@@ -132,7 +142,7 @@ tw.service_90_sidebar(entityName)
 })
   .catch(err => console.error(err))
 
-
+refreshStatus(entityName)
 // imposta il servizio refreshStatus in loop
 setInterval(refreshStatus, 10000, entityName)
 // il servizio recupera gli stati delle macchine installate.
@@ -144,14 +154,14 @@ function refreshStatus(entityName){
     // Controlla se sono presenti delle celle
     if(JSON.stringify(res.dryers) !== '[]'){
       for(let i=1; i<=res.dryers.length; i++){
-        let span_status = '#id-nav-dryer-' + i + ' div a :last-child'
+        let span_status = '#id-nav-dryer-' + i + ' a > span:last-child'
         $(span_status).text(res.dryers[i-1].status)
       }
     }
 
     if(JSON.stringify(res.lines) !== '[]'){
       for(let i=1; i<=res.lines.length; i++){
-        let span_status = '#id-nav-dashboard-line-' + i + ' a :last-child'
+        let span_status = '#id-nav-dashboard-line-' + i + ' a > span:last-child'
         $(span_status).text(res.lines[i-1].status)
       }
     }
