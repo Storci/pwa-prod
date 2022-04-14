@@ -27,23 +27,17 @@ let arrayUM = ['Produzione (kg/h)', 'Pressione Estrusore (Bar)']
 let chartActualProduction = am.createXYChart("IDTrendActualProduction", 'IDLegendActualProduzione', 0, 2, arrayUM)
 let chartHistoryProduction = am.createXYChart("IDTrendHistoryProduction", 'IDLegendHistoryProduction', 0, 2, arrayUM)
 // Crea le series da visualizzare sul grafico
-am.createLineSeries(chartActualProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true)
+am.createLineSeries(chartActualProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true, true)
 am.createLineSeries(chartActualProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, true)
-am.createLineSeries(chartActualProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false, true)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Cilindro', 'time', 'PV_Temp_Cilindro', '°C', 0, false, false)
-am.createLineSeries(chartActualProduction, 'SP - Temperatura Cilindro', 'time', 'SP_Temp_Cilindro', '°C', 0, false, false)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Testata', 'time', 'PV_Temp_Testata', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Testata', 'time', 'SP_Temp_Testata', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, "PV - kcal/h", "time", "PV_Consumi", "kcal/h", 1, false, true)
+am.createLineSeries(chartActualProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false)
+am.createLineSeries(chartActualProduction, "PV - Temperatura Camera", "time", "PV_Temp_Camera", "°C", 0, false, false)
+am.createLineSeries(chartActualProduction, "PV - Portata Vapore", "time", "PV_Portata_Vapore", "°C", 0, false, false)
 // Crea le series da visualizzare nel grafico
-am.createLineSeries(chartHistoryProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true)
+am.createLineSeries(chartHistoryProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true, true)
 am.createLineSeries(chartHistoryProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, true)
-am.createLineSeries(chartHistoryProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false, true)
-am.createLineSeries(chartHistoryProduction, 'PV - Temperatura Cilindro', 'time', 'PV_Temp_Cilindro', '°C', 0, false, false)
-am.createLineSeries(chartHistoryProduction, 'SP - Temperatura Cilindro', 'time', 'SP_Temp_Cilindro', '°C', 0, false, false)
-am.createLineSeries(chartHistoryProduction, 'PV - Temperatura Testata', 'time', 'PV_Temp_Testata', '°C', 0, false, true)
-am.createLineSeries(chartHistoryProduction, 'PV - Temperatura Testata', 'time', 'SP_Temp_Testata', '°C', 0, false, true)
-am.createLineSeries(chartHistoryProduction, "PV - kcal/h", "time", "PV_Consumi", "kcal/h", 1, false, true)
+am.createLineSeries(chartHistoryProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false)
+am.createLineSeries(chartHistoryProduction, "PV - Temperatura Camera", "time", "PV_Temp_Camera", "°C", 0, false, false)
+am.createLineSeries(chartHistoryProduction, "PV - Portata Vapore", "time", "PV_Portata_Vapore", "°C", 0, false, false)
 
 // Ricalcola la dimensione del div della legenda - viene eseguito ogni secondo
 setInterval(am.refreshLegendSize, 1000, chartActualProduction, 'IDLegendActualProduzione')
@@ -56,17 +50,19 @@ let query  = 'SELECT '
 query += 'mean("Impasto_PV_Impasto_Totale") as "PV_Impasto", '
 query += 'mean("Impasto_SP_Impasto_Totale") as "SP_Impasto", '
 query += 'mean("Pressa_Motori_Estrusore_PV_Pressione") as "PV_Pressione", '
-query += 'mean("Pressa_Termostatazione_Cilindro_PV_Temperatura") as "PV_Temp_Cilindro", '
-query += 'mean("Pressa_Termostatazione_Cilindro_SP_Temperatura") as "SP_Temp_Cilindro", '
-query += 'mean("Pressa_Termostatazione_Testata_PV_Temperatura") as "PV_Temp_Testata", '
-query += 'mean("Pressa_Termostatazione_Testata_SP_Temperatura") as "SP_Temp_Testata", '
-query += 'mean("Pressa_Motori_Estrusore_PV_Calorie") as "PV_Consumi" '
+query += 'mean("Pasta_Instant_PV_Temperatura_Camera") as "PV_Temp_Camera", '
+query += 'mean("Pasta_Instant_PV_Portata_Vapore") as "PV_Portata_Vapore" '
 query += 'FROM "' + entityName + '" '
 query += 'WHERE time > {1}ms and time < {2}ms GROUP BY time(1m) fill(previous)'
 
 // Pulsanti per l'esportazione del grafico in png
 $('#IDButtonExportTrendActualProduction').click(el => { am.getExport(chartActualProduction) })
 $('#IDButtonExportTrendHistoryProduction').click(el => { am.getExport(chartHistoryProduction) })
+
+// Grafico Card Telai Al Minuto
+
+common.cardLineTrend('IDDivChart2', entityName, 'Pasta_Instant_PV_Temperatura_Camera', '', '°C')
+common.cardLineTrend('IDDivChart3', entityName, 'Pasta_Instant_PV_Portata_Vapore', '', 'm3/h')
 
 // ******************** GRAFICO PRODUZIONE ATTUALE ********************
 common.actualLineProduction(chartActualProduction, query, entityName)
@@ -87,37 +83,18 @@ setInterval(setCardsValue, 10000, entityName);	// ogni 10 sec
 // uguale al nome della property di thingworx che ritorna il servizio.
 async function setCardsValue(entityName){
   // Richiama il servizio di thingworx.
-	tw.getLinePressInfo(entityName)
+	tw.getLinePastaInstantInfo(entityName)
 		.then(info => {
 			// Assegna alle varie label il valore corretto recuperato da thingworx
 			$('[propertyname]').each(function(){
         let value = 0
         if(typeof info[$(this).attr('propertyname')] == 'number'){
-          value = info[$(this).attr('propertyname')].toFixed(2)
+          value = info[$(this).attr('propertyname')].toFixed($(this).attr('decimals'))
         }else{
           value = info[$(this).attr('propertyname')]
         }
         $(this).text(value)
       })
-			// Esegue il ciclo per ogni progress bar trovata nella pagina
-			$('[pg-value-propertyname]').each(function(){
-				// Definisce la variabile a 0
-				let value = 0
-				try{
-					// Cntrolla se è stato impostato un valore per l'attributo 'pg-maxvalue-propertyname'
-					// Se presente, calcola la percentuale del valore attuale 'pg-value-propertyname' con quella del valore massimo 'pg-maxvalue-propertyname'
-					// se non presente, calcola la percentuale del valore attuale 'pg-value-propertyname' con quella del valore massimo 'aria-valuemax'
-					if($(this).attr('pg-maxvalue-propertyname')){
-						value = (parseFloat(info[$(this).attr('pg-value-propertyname')]) / parseFloat(info[$(this).attr('pg-maxvalue-propertyname')])) * 100
-					}else{
-						value = (parseFloat(info[$(this).attr('pg-value-propertyname')]) / $(this).attr('aria-valuemax')) * 100
-					}
-				}catch(e){ console.warn('1 - ' + e)	}
-				// Imposta il width del riempimento
-		    let prgbar_value = 'width:' + value + '%'
-				// Assegna il valore di riempimento alla progress bar relativa
-		    $(this).attr('style', prgbar_value)
-			})
 		})
 		.catch(error => console.error(error))
 }

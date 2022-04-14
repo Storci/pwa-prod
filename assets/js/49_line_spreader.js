@@ -24,30 +24,24 @@ fb.onAuthStateChanged_2()
 // - Numero di assi Y associate al GRAFICO
 // - Array con le unità di misura
 let arrayUM = ['Produzione (kg/h)', 'Pressione Estrusore (Bar)']
-let chartActualProduction 		 = am.createXYChart("IDTrendActualProduction", 'IDLegendActualProduzione', 0, 2, arrayUM)
-let chartHistoryProduction 		 = am.createXYChart("IDTrendHistoryProduction", 'IDLegendHistoryProduction', 0, 2, arrayUM)
-let chartPieSettingsProduction = am.createPieChart('id-div-pie-chart')
+let chartActualProduction = am.createXYChart("IDTrendActualProduction", 'IDLegendActualProduzione', 0, 2, arrayUM)
+let chartHistoryProduction = am.createXYChart("IDTrendHistoryProduction", 'IDLegendHistoryProduction', 0, 2, arrayUM)
 // Crea le series da visualizzare sul grafico
-am.createLineSeries(chartActualProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, false, true)
-am.createLineSeries(chartActualProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, true, false)
+am.createLineSeries(chartActualProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true, true)
+am.createLineSeries(chartActualProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, true)
 am.createLineSeries(chartActualProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false)
-am.createLineSeries(chartActualProduction, 'PV - Portata Acqua', 'time', 'PV_Portata_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, 'SP - Portata Acqua', 'time', 'SP_Portata_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Acqua', 'time', 'PV_Temp_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, 'SP - Temperatura Acqua', 'time', 'SP_Temp_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, "PV - kcal/h", "time", "PV_Consumi", "kcal/h", 1, false, true)
+am.createLineSeries(chartActualProduction, "PV - Canne al Minuto", "time", "PV_Canne_Minuto", "Canne/min", 0, false, true)
+am.createLineSeries(chartActualProduction, "SP - Canne Prodotte", "time", "PV_Canne_Prodotte", "", 0, false, true)
+am.createLineSeries(chartActualProduction, "PV - Peso Canna", "time", "PV_Peso_Canna", "kg", 0, false, true)
+am.createLineSeries(chartActualProduction, "SP - Tempo Canna", "time", "PV_Tempo_Canna", "sec", 0, false, true)
 // Crea le series da visualizzare nel grafico
-am.createLineSeries(chartHistoryProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, false, true)
-am.createLineSeries(chartHistoryProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, false)
+am.createLineSeries(chartHistoryProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true, true)
+am.createLineSeries(chartHistoryProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, true)
 am.createLineSeries(chartHistoryProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false)
-am.createLineSeries(chartHistoryProduction, 'PV - Portata Acqua', 'time', 'PV_Portata_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartHistoryProduction, 'SP - Portata Acqua', 'time', 'SP_Portata_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartHistoryProduction, 'PV - Temperatura Acqua', 'time', 'PV_Temp_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartHistoryProduction, 'SP - Temperatura Acqua', 'time', 'SP_Temp_Acqua', '°C', 0, false, true)
-am.createLineSeries(chartHistoryProduction, "PV - kcal/h", "time", "PV_Consumi", "kcal/h", 1, false, true)
-// Crea le series da visualizzare nel grafico
-am.createPieSeries(chartPieSettingsProduction, 'value', 'category', 'unit', 'kg/h')
-//am.createPieSeries(chartPieSettingsProduction, 'value_2', 'category_2', 'l/h')
+am.createLineSeries(chartHistoryProduction, "PV - Canne al Minuto", "time", "PV_Canne_Minuto", "Canne/min", 0, false, true)
+am.createLineSeries(chartHistoryProduction, "SP - Canne Prodotte", "time", "PV_Canne_Prodotte", "", 0, false, true)
+am.createLineSeries(chartHistoryProduction, "PV - Peso Canna", "time", "PV_Peso_Canna", "kg", 0, false, true)
+am.createLineSeries(chartHistoryProduction, "SP - Tempo Canna", "time", "PV_Tempo_Canna", "sec", 0, false, true)
 
 // Ricalcola la dimensione del div della legenda - viene eseguito ogni secondo
 setInterval(am.refreshLegendSize, 1000, chartActualProduction, 'IDLegendActualProduzione')
@@ -60,17 +54,25 @@ let query  = 'SELECT '
 query += 'mean("Impasto_PV_Impasto_Totale") as "PV_Impasto", '
 query += 'mean("Impasto_SP_Impasto_Totale") as "SP_Impasto", '
 query += 'mean("Pressa_Motori_Estrusore_PV_Pressione") as "PV_Pressione", '
-query += 'mean("Impasto_PV_Dosatore_Acqua") as "PV_Portata_Acqua", '
-query += 'mean("Impasto_SP_Dosatore_Acqua_Litri") as "SP_Portata_Acqua", '
-query += 'mean("Impasto_PV_Temperatura_Acqua") as "PV_Temp_Acqua", '
-query += 'mean("Impasto_SP_Temperatura_Acqua") as "SP_Temp_Acqua", '
-query += 'mean("Pressa_Motori_Estrusore_PV_Calorie") as "PV_Consumi" '
+query += 'mean("Stenditrice_PV_Canne_Minuto") as "PV_Canne_Minuto", '
+query += 'mean("Stenditrice_PV_Canne_Prodotto") as "PV_Canne_Prodotte", '
+query += 'mean("Stenditrice_PV_Peso_Canna") as "PV_Peso_Canna", '
+query += 'mean("Stenditrice_PV_Tempo_Canna") as "PV_Tempo_Canna" '
 query += 'FROM "' + entityName + '" '
-query += 'WHERE time > {1}ms and time < {2}ms GROUP BY time(10s) fill(previous)'
+query += 'WHERE time > {1}ms and time < {2}ms GROUP BY time(1m) fill(previous)'
 
 // Pulsanti per l'esportazione del grafico in png
 $('#IDButtonExportTrendActualProduction').click(el => { am.getExport(chartActualProduction) })
 $('#IDButtonExportTrendHistoryProduction').click(el => { am.getExport(chartHistoryProduction) })
+
+// Grafico Card Telai Al Minuto
+common.cardLineTrend('IDDivChart1', entityName, 'Stenditrice_PV_Peso_Canna', '', 'trays/m')
+// Grafico card Velocità Motore
+common.cardLineTrend('IDDivChart2', entityName, 'Stenditrice_PV_Tempo_Canna', '', 'sec')
+// Grafico card Velocità Motore
+common.cardLineTrend('IDDivChart3', entityName, 'Stenditrice_PV_Canne_Minuto', '', 'min')
+// Grafico card Velocità Motore
+common.cardLineTrend('IDDivChart4', entityName, 'Stenditrice_PV_Canne_Prodotte', '', '')
 
 // ******************** GRAFICO PRODUZIONE ATTUALE ********************
 common.actualLineProduction(chartActualProduction, query, entityName)
@@ -79,23 +81,30 @@ common.actualLineProduction(chartActualProduction, query, entityName)
 common.historyLineProduction(chartHistoryProduction, query, entityName)
 
 // ******************** RECUPERO DATI TW ********************
-setCardsValue(entityName, chartPieSettingsProduction)
+setCardsValue(entityName)
 // Funzioni cicliche
-setInterval(setCardsValue, 10000, entityName, chartPieSettingsProduction);	// ogni 10 sec
+setInterval(setCardsValue, 10000, entityName);	// ogni 10 sec
 
 
-console.log(chartPieSettingsProduction)
 // Funzione che recupera i dati da thingworx e li visualizza nelle card della pagina.
 // Prerequisiti: le label che si vogliono popolare con i valori da thingworx devono avere
 // la seguente classe '.thingworx-property-value'.
 // Inoltre ogni label deve avere una key chiamata 'propertyname', il valore della key deve essere
 // uguale al nome della property di thingworx che ritorna il servizio.
-function setCardsValue(entityName, chart){
-	// Richiama il servizio di thingworx.
-	tw.getLineInfo(entityName)
+async function setCardsValue(entityName){
+  // Richiama il servizio di thingworx.
+	tw.getLineStenditriceInfo(entityName)
 		.then(info => {
 			// Assegna alle varie label il valore corretto recuperato da thingworx
-			$('[propertyname]').each(function(){ $(this).text(info[$(this).attr('propertyname')])	})
+			$('[propertyname]').each(function(){
+        let value = 0
+        if(typeof info[$(this).attr('propertyname')] == 'number'){
+          value = info[$(this).attr('propertyname')].toFixed($(this).attr('decimals'))
+        }else{
+          value = info[$(this).attr('propertyname')]
+        }
+        $(this).text(value)
+      })
 			// Esegue il ciclo per ogni progress bar trovata nella pagina
 			$('[pg-value-propertyname]').each(function(){
 				// Definisce la variabile a 0
@@ -115,14 +124,6 @@ function setCardsValue(entityName, chart){
 				// Assegna il valore di riempimento alla progress bar relativa
 		    $(this).attr('style', prgbar_value)
 			})
-			// Genera il set di dati da visualizzare nel pie chart
-		  let data = [
-		    { value: info.SP_Portata_Sfarinati, 					 category: 'Semola',					 unit: 'kg/h', color: am4core.color('#ffc107')},
-		    { value: info.Impasto_SP_Dosatore_Acqua_Litri, category: 'Acqua', 					 unit: 'l/h',  color: am4core.color('#0dcaf0')  },
-		    { value: info.Impasto_SP_Dosatore_Liquido_1, 	 category: 'Uovo / Colorante', unit: 'l/h',  color: am4core.color('#6c757d')  },
-		    { value: info.Impasto_SP_Dosatore_Polvere_1, 	 category: 'Additivo', 			   unit: 'kg/h', color: am4core.color('#198754') },
-		  ]
-		  chart.data = data
 		})
 		.catch(error => console.error(error))
 }
