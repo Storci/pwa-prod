@@ -1,6 +1,7 @@
 // Carica le funzioni globali
 import * as tw from "./Global/Thingworx/thingworx_api_module.js"
 import * as fb from "./Global/Firebase/firebase_auth_module.js"
+import * as lang from "./Global/Common/Translation.js"
 
 // recupera il nome dell'entity (selezionata, se utente storci)
 // il nome dell'entity permette di recuperare le macchine presenti
@@ -22,7 +23,8 @@ if(localStorage.getItem('global_customer').includes("Storci")){
 let pageURL = window.location.href
     pageURL = pageURL.split('\/')
 let pageName = pageURL[pageURL.length-1]
-
+// funzione per la traduzione
+lang.getLanguage()
 // recupera il nome dell'utente loggato.
 // il nome viene visualizzato nella sidebar.
 // se l'utente è loggato, viene nascosto il tasto di login
@@ -30,6 +32,7 @@ fb.onAuthStateChanged()
   .then(user => {
     $('#id-username').text(user.email)
     $('#id-user-login').addClass('d-none')
+   // $('#id-user-profile').show()
   })
   .catch(error => {})
 // controlla quando viene premuto il tasto di logout
@@ -49,6 +52,7 @@ tw.service_90_sidebar(entityName)
         // pagine
         let href_dashboard         = '30_dryers_general_dashboard.html'
         let href_history           = '31_dryers_history.html'
+        let href_customer_list     = '01_Customers.html'
         // id
         let idAccordion            = '#id-accordion-dryers'
         let idBtnAccordion         = '#id-btn-accordion-dryers'
@@ -56,6 +60,8 @@ tw.service_90_sidebar(entityName)
         // link
         let nav_dashboard_link     = '#id-nav-dashboard-dryer a'
         let nav_history_link       = '#id-nav-history-dryer a'
+        let nav_customer_link      = '#id-nav-customers-list a'
+        
 
         // Visualizza il menu delle celle
         $(idAccordion).removeClass('d-none')
@@ -72,6 +78,7 @@ tw.service_90_sidebar(entityName)
         // se la pagina della dashboard o dello storico
         if(pageName == href_dashboard){ $(nav_dashboard_link).addClass('active') }
         if(pageName == href_history)  { $(nav_history_link).addClass('active') }
+        if(pageName == href_customer_list) { $(nav_customer_link).addClass('active')}
 
 
         // Visualizza le celle presenti dal cliente.
@@ -205,3 +212,4 @@ function getListMachine(entityName){
   })
 	.catch(error => console.error(error))
 }
+ 

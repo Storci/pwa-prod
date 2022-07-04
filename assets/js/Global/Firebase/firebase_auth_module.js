@@ -2,7 +2,6 @@
 // done in HTML however using modules here is more convenient for
 // ensuring sample correctness offline.
 //import firebase from "firebase/app";
-//import "firebase/auth";
 
 // Effettua il login di utente già registrato
 async function signInWithEmailPassword(email, password) {
@@ -17,18 +16,35 @@ async function signInWithEmailPassword(email, password) {
 function signUpWithEmailPassword(email, password, baseURL) {
 	// [START auth_signup_password]
 	firebase.auth().createUserWithEmailAndPassword(email, password)
-	.then((userCredential) => {
-		let user = userCredential.user
-		window.location.href = baseURL + '/signUpConfirmed.html'
-	})
+	.then((userCredential)  => {
+            let db = firebase.firestore();
+            db.collection('users').doc(userCredential.user.email).set({
+            firstName : signUpForm['IDName'].value,
+            lastName : signUpForm['IDLastName'].value,
+			mail : signUpForm['IDEmail'].value,
+            phoneNumber : signUpForm['IDPhoneNumber'].value,
+            Countries : signUpForm['IDCountries'].value,
+			companyName: signUpForm['IDCompanyName'].value
+
+        });
+	}).then(() =>{
+		$("#signUpSuccess").fadeIn(3000);
+		window.location.href = './90_signIn.html'
+    })
 	.catch((error) => {
 		let errorCode = error.code
 		let errorMessage = error.message
-
-		console.error('code: ' + errorCode + ' - ' + errorMessage)
+		let errorMail = error.code
+		let errorMailMessage = error.message
 
 		$('#IDErrorMessage').css("display", "block")
 		$('#IDErrorMessage').text('code: ' + errorCode + ' - ' + errorMessage)
+
+		// effettuare un controllo se la mail esiste gia in firebase
+		if(errorMail == "auth/email-already-in-use"){
+			$("#signUpfailed").fadeIn(3000);
+			console.log(errorMail)
+		}
 	})
 }
 
@@ -81,6 +97,7 @@ async function onAuthStateChanged(){
 
 function onAuthStateChanged_2(){
 	firebase.auth().onAuthStateChanged((user) => {
+		//console.log(user)
   	if(!user){
 			let pageURL = window.location.href
 			localStorage.setItem('urlPage', pageURL)
@@ -131,4 +148,84 @@ function setPersistenceNone() {
 }
 
 
-export {signInWithEmailPassword, signUpWithEmailPassword, sendEmailVerification, sendPasswordReset, signOut, onAuthStateChanged, setPersistenceSession, setPersistenceNone, onAuthStateChanged_2};
+/*function userUpdatePassword(user, newPassword){
+	user.updatePassword(newPassword).then(() => 
+	{
+		console.log("ok")
+		// Update successful.
+	  }).catch((error) => {
+		console.warn(error)
+		// ...
+	  });
+}*/
+
+/*function changePassword(user, credential, newPassword){
+	user.reauthenticateWithCredential(credential).then(() => {
+		// User re-authenticated.
+		console.log(newPassword)
+		user.updatePassword(newPassword).then(() => 
+	{
+		alert("Password Successfully updated")
+	  
+	  });
+	  }).catch((error) => {
+		// An error ocurred
+		// ...
+	  });
+}*/
+
+/*function getUserData(email) {
+	let dbUser = firebase.firestore();
+	dbUser.collection('users').get(email).then((snapshot) =>{
+		snapshot.docs.forEach(doc =>{
+			console.log(doc.data())
+		})
+	 })
+}*/
+
+
+/*function getUserData(email, pass){
+	firebase.auth().createUserWithEmailAndPassword(email)
+	.then((userCredential) =>{
+		let db = firebase.firestore();
+		db.collection('users').doc(userCredential.user.email).get( {
+			firstName : signUpForm['display_name'].value,
+            lastName : signUpForm['display_lastname'].value,
+            phoneNumber : signUpForm['display_country'].value,
+            Countries : signUpForm['display_telephone'].value,
+			companyName: signUpForm['display_company'].value
+		})
+	})
+}
+*/
+
+/*function getUserData(){
+	firebase.auth().onAuthStateChanged((user) => {
+		if (user) {
+		  // User is signed in, see docs for a list of available properties
+		  // https://firebase.google.com/docs/reference/js/firebase.User
+		  var firstName = user.firstName;
+		  
+		  // ...
+		} else {
+		  // User is signed out
+		  // ...
+		}
+	  });
+}*/
+
+export {
+	signInWithEmailPassword,
+	signUpWithEmailPassword,
+	sendEmailVerification,
+	sendPasswordReset,
+	signOut, 
+	onAuthStateChanged, 
+	setPersistenceSession, 
+	setPersistenceNone, 
+	onAuthStateChanged_2, 
+	//userUpdatePassword, 
+	//changePassword
+	//getUserData
+	
+};

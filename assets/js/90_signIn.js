@@ -21,13 +21,18 @@ $("#IDButtonLogin").click(function(){
 		.then(user => {
 			tw.getUser(user.user.email)
 				.then(customer => {
+					// Definizione globale del customer a cui l'utente è associato.
+					localStorage.setItem('global_customer', customer.rows[0].Customer)
+					// salvo il customer selezionato
+					localStorage.setItem('global_selected_customer', customer.rows[0].Customer)
+
 					if(customer.rows[0].Customer.includes("Storci")){
 						// Carica la pagina.
 						window.location.href = "./01_Customers.html"
 					}else{
 						// Carica la pagina.
 						//window.location.href = "./02_Dashboard.html?entityName=" + customer.rows[0].entityName
-						window.location.href = "./00_main_page.html?entityName=" + customer.rows[0].entityName
+						window.location.href = "./02_Dashboard.html?entityName=" + customer.rows[0].entityName
 					}
 				})
 				.catch(error => console.error(error))

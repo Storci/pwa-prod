@@ -7,6 +7,7 @@ const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 // Recupera l'entity name della thing
 let entityName = urlParams.get('entityName')
+console.log(entityName)
 let selectedCustomer = localStorage.getItem("global_selected_customer")
 
 // definisce l'url di base della pagina attuale (in questo caso della pagina index.html).
@@ -21,6 +22,9 @@ let pageURL = window.location.href
 //fb.onAuthStateChanged_2(baseURL, pageURL)
 // Recupera dei dati dalle local storage
 
+// Recupera il nome dell'utente da firebase, controlla che sia loggato.
+// Nel caso non fosse loggato richiama la pagina di login
+fb.onAuthStateChanged_2()
 // Imposta il nome del cliente nella breadcrumb
 // Vengono sostituiti tutti gli underscore presenti nel nome
 //$("#IDBreadcrumbCustomer").text(selectedCustomer.replace(/_/g, ' '));
@@ -94,6 +98,10 @@ function createCellCard(cellsGroup){
 		card    += '</div>'
 		// Aggiunge la card alla row
 		$("#IDRow").append(card)
+
+		document.getElementById(id).onclick = function(){
+			window.location.href = "./32_dryer_dashboard.html?entityname=" + el.ID
+		}
 	})
 }
 // Funzione che recupera i dati del cliente da TW

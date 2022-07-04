@@ -20,11 +20,15 @@ $('#IDRow3').css("display", "none")
 $('#IDNavbar').css("display", "none")
 $("#IDDivSpinning").css("display", "block")
 */
+// Recupera il nome dell'utente da firebase, controlla che sia loggato.
+// Nel caso non fosse loggato richiama la pagina di login
+fb.onAuthStateChanged_2()
 
 // Esegue il codice principale al caricamento della pagina
 $("body").ready(async function(){
 	// Definisce la variabile
 	let user;
+	console.log(user)
 	// Recupera il nome dell'utente da firebase
 	//await fb.onAuthStateChanged().then(result => user = result).catch(error => console.error(error))
 	// Se l'utente non è loggato viene reindirizzato alla pagina di login
