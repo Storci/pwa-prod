@@ -24,17 +24,17 @@ fb.onAuthStateChanged_2()
 // - Numero di assi Y associate al GRAFICO
 // - Array con le unità di misura
 let arrayUM = ['Produzione (kg/h)', 'Pressione Estrusore (Bar)']
-let chartActualProduction = am.createXYChart("IDTrendActualProduction", 'IDLegendActualProduzione', 0, 2, arrayUM)
-let chartHistoryProduction = am.createXYChart("IDTrendHistoryProduction", 'IDLegendHistoryProduction', 0, 2, arrayUM)
+let chartActualProduction = am.createXYChart("IDTrendActualProduction", 'IDLegendActualProduzione', 3, 4, arrayUM)
+let chartHistoryProduction = am.createXYChart("IDTrendHistoryProduction", 'IDLegendHistoryProduction', 3, 4, arrayUM)
 // Crea le series da visualizzare sul grafico
-am.createLineSeries(chartActualProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true)
-am.createLineSeries(chartActualProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, true)
-am.createLineSeries(chartActualProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 0, false, false, true)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Cilindro', 'time', 'PV_Temp_Cilindro', '°C', 0, false, false)
-am.createLineSeries(chartActualProduction, 'SP - Temperatura Cilindro', 'time', 'SP_Temp_Cilindro', '°C', 0, false, false)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Testata', 'time', 'PV_Temp_Testata', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, 'PV - Temperatura Testata', 'time', 'SP_Temp_Testata', '°C', 0, false, true)
-am.createLineSeries(chartActualProduction, "PV - kcal/h", "time", "PV_Consumi", "kcal/h", 1, false, true)
+am.createLineSeries(chartActualProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 3, false, true)
+am.createLineSeries(chartActualProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 3, false, true)
+am.createLineSeries(chartActualProduction, "PV - Pressione", "time", "PV_Pressione", "Bar", 3, false, false, true)
+am.createLineSeries(chartActualProduction, 'PV - Temperatura Cilindro', 'time', 'PV_Temp_Cilindro', '°C', 3, false, false)
+am.createLineSeries(chartActualProduction, 'SP - Temperatura Cilindro', 'time', 'SP_Temp_Cilindro', '°C', 3, false, false)
+am.createLineSeries(chartActualProduction, 'PV - Temperatura Testata', 'time', 'PV_Temp_Testata', '°C', 3, false, true)
+am.createLineSeries(chartActualProduction, 'PV - Temperatura Testata', 'time', 'SP_Temp_Testata', '°C', 3, false, true)
+am.createLineSeries(chartActualProduction, "PV - kcal/h", "time", "PV_Consumi", "kcal/h", 3, false, true)
 // Crea le series da visualizzare nel grafico
 am.createLineSeries(chartHistoryProduction, "PV - Impasto", "time", "PV_Impasto", "kg/h", 0, false, true)
 am.createLineSeries(chartHistoryProduction, "SP - Impasto", "time", "SP_Impasto", "kg/h", 0, false, true)
@@ -67,6 +67,11 @@ query += 'WHERE time > {1}ms and time < {2}ms GROUP BY time(1m) fill(previous)'
 // Pulsanti per l'esportazione del grafico in png
 $('#IDButtonExportTrendActualProduction').click(el => { am.getExport(chartActualProduction) })
 $('#IDButtonExportTrendHistoryProduction').click(el => { am.getExport(chartHistoryProduction) })
+
+$('#fullscreen').click(function(){
+	let url ='./machineGraph/71_extruderGraph.html?'+'entityName='+ entityName
+	window.open(url, '_blank')
+})
 
 // ******************** GRAFICO PRODUZIONE ATTUALE ********************
 common.actualLineProduction(chartActualProduction, query, entityName)

@@ -3,7 +3,7 @@ import * as tw from "./Global/Thingworx/thingworx_api_module.js"
 import * as am from "./Global/amchart/amchart_functions.js"
 import * as fb from "./Global/Firebase/firebase_auth_module.js"
 import * as lang from "./Global/Common/Translation.js"
-import * as common from "./Global/Common/commonFunctions.js"
+
 
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
@@ -64,6 +64,11 @@ query += 'WHERE time > {1}ms and time < {2}ms GROUP BY time(1m) fill(previous)'
 // Pulsanti per l'esportazione del grafico in png
 $('#IDButtonExportTrendActualProduction').click(el => { am.getExport(chartActualProduction) })
 $('#IDButtonExportTrendHistoryProduction').click(el => { am.getExport(chartHistoryProduction) })
+
+$('#fullscreen').click(function(){
+	let url ='./machineGraph/74_spreaderGraph.html?'+'entityName='+ entityName 
+	window.open(url, '_blank')
+})
 
 // Grafico Card Telai Al Minuto
 common.cardLineTrend('IDDivChart1', entityName, 'Stenditrice_PV_Peso_Canna', '', 'trays/m')

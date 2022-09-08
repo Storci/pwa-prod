@@ -3,6 +3,7 @@ import * as tw from "./Global/Thingworx/thingworx_api_module.js"
 import * as fb from "./Global/Firebase/firebase_auth_module.js"
 import * as lang from "./Global/Common/Translation.js"
 
+
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 // Recupera l'entity name della thing
@@ -100,7 +101,7 @@ function createCellCard(cellsGroup){
 		$("#IDRow").append(card)
 
 		document.getElementById(id).onclick = function(){
-			window.location.href = "./32_dryer_dashboard.html?entityname=" + el.ID
+			window.location.href = "./32_dryer_dashboard.html?entityName=" + el.entityName
 		}
 	})
 }
