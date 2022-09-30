@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" data-pgc-set-master class="bg-white">
-    <head data-pgc-edit="head">
+<html lang="en" class="bg-white" data-pgc-master="00_master.html">
+    <head data-pgc-field="head">
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -17,6 +17,7 @@
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <!-- Custom styles for this template -->
         <link href="./assets/css/dashboard.css" rel="stylesheet"/>
+        <!-- <link href="./assets/css/table-style.css" rel="stylesheet"/> -->
         <link href="./assets/css/storci-styles.css" rel="stylesheet"/>
         <!-- <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/> -->
         <!-- AM4CORE CHART -->
@@ -34,10 +35,17 @@
         <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js" type="module"></script>  -->
         <script defer src="./assets/js/Global/Firebase/firebase_config.js"></script>
         <!-- CUSTOM SCRIPT -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
         <script src="./assets/js/sidebar.js" type="module"></script>
-        <script defer src="./assets/js/userAccountSettings.js" type="module"></script>
         <script src="./assets/js/Global/Common/Theme.js" type="module"></script>
-        <script src="./assets/js/Global/Common/Translation.js" type="module"></script>
+        <script defer type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <script defer src="./assets/js/sidebar.js" type="module"></script>
+        <script defer src="./assets/js/Global/Common/Theme.js" type="module"></script>
+        <script defer src="./assets/js/Global/Common/Translation.js" type="module"></script>
+        <script defer src="https://unpkg.com/bootstrap-table/dist/bootstrap-table.min.js"></script>
+        <script defer src="./assets/js/96_alarmHistory.js" type="module"></script>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     </head>
     <body class="sidebar-scroll-hidden" style="background-color: var(--bs-body-bg);">
         <script> $('body').addClass('d-none')</script>
@@ -161,7 +169,7 @@
                         <ul class="nav flex-column mb-2">
                             <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="95_actualAlarms.html"> <span class="material-icons-outlined">notifications</span> <span class="ms-3" translate_id="alarms">Alarms</span> </a>
                             </li>
-                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="96_alarmHistory.html"> <span class="material-icons-outlined">history</span> <span class="ms-3" translate_id="alarms_history">Alarms History</span> </a> 
+                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="96_alarmHistory.html"> <span class="material-icons-outlined">history</span> <span class="ms-3" translate_id="alarms_history">Alarms History</span> </a>
                             </li>
                             <li class="nav-item" id="triggerIssue"> <a class="align-items-center d-flex nav-link" href="#"> <span class="material-icons-outlined">bug_report</span> <span class="ms-3" translate_id="issues">Report Issue</span> </a>
                             </li>
@@ -178,8 +186,60 @@
                         </ul><span style="font-size: 10px;" id="github-version" class="p-2">Version</span>
                     </div>
                 </nav>
-                <main class="col-lg-10 col-md-9 ms-sm-auto px-md-4 bg-white-customized" id="id-column-master" data-pgc-edit="id-column-master[id]">
-</main>
+                <main class="col-lg-10 col-md-9 ms-sm-auto px-md-4 bg-white-customized" id="id-column-master" data-pgc-field="id-column-master">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h2 class="card-result" translate_id="list_clients_connected">List of Previous Alarms</h2>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+</div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="input-group mb-3"> <span class="material-icons-outlined input-group-text">
+                                                    date_range </span>
+                            <input type="text" id="dateFilter" class="form-control" placeholder="datePicker" aria-label="datePicker" aria-describedby="basic-addon1"/>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-responsive">
+                            <thead class="thead-dark">
+                                <tr class="bg-dark">
+                                    <th class="align-items-center  fw-light" id="firstColumn" style="color:#fff">
+                                        <div class="align-items-center d-flex"> <span>Timestart</span> <span class="icon-table d-none material-icons-outlined" id="iconTable1" style="color: #fff">expand_more</span>
+                                        </div>
+                                    </th>
+                                    <th class="align-items-center  fw-light" style="color:#fff">
+                                        <div class="align-items-center d-flex"> <span>TimeEnd</span> <span class="icon-table d-none material-icons-outlined" id="iconTable1" style="color: #fff">expand_more</span>
+                                        </div>
+                                    </th>
+                                    <th class="align-items-center  fw-light" style="color: #fff">
+                                        <div class="align-items-center d-flex"> <span>Machine Name</span> <span class="icon-table d-none material-icons-outlined" id="iconTable2" style="color: #fff">expand_more</span>
+                                        </div>
+                                    </th>
+                                    <th class="fw-light  " style="color: #fff">
+                                        <div class="align-items-center d-flex"> <span>Gravity</span> <span class="icon-table d-none material-icons-outlined" id="iconTable3" style="color: #fff">expand_more</span>
+                                        </div>
+                                    </th>
+                                    <th class="fw-light " style="color: #fff">
+                                        <div class="align-items-center d-flex"> <span>Customer</span> <span class="icon-table d-none material-icons-outlined" id="iconTable4" style="color: #fff">expand_more</span>
+                                        </div>
+                                    </th>
+                                    <th class="fw-light" style="color: #fff">
+                                        <div class="align-items-center d-flex"> <span>Message</span> <span class="icon-table d-none material-icons-outlined" id="iconTable5" style="color: #fff;">expand_more</span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="IDAlertHistoryBody">
+</tbody>
+                        </table>
+                    </div>
+                    <div class="modal fade pg-show-modal" id="modal1" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false">
+                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                          <lottie-player src="https://assets9.lottiefiles.com/private_files/lf30_bU3Dr6.json"  background="transparent"  speed="1"  style="width: 100px; height: 100px;"  loop  autoplay></lottie-player>
+                        </div>
+                    </div>
+                </main>
             </div>
         </div>
     </body>
