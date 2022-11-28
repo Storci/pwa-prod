@@ -7,7 +7,7 @@
         <meta name="description" content=""/> 
         <meta name="author" content=""/> 
         <link rel="icon" href="./assets/img/icon_round_storci.svg" type="image/x-icon"/> 
-        <title>Dashboard Cella</title>         
+        <title>IoT Storci</title>         
         <!-- GOOGLE ICON -->         
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet"/> 
         <!-- JQUERY -->         
@@ -40,7 +40,7 @@
         <script defer src="./assets/js/Global/Common/Translation.js" type="module"></script>         
         <script defersrc="https://unpkg.com/bootstrap-table/dist/bootstrap-table.min.js"></script>         
         <script defer src="./assets/js/95_actualAlarm.js" type="module"></script>         
-        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>         
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     </head>     
     <body class="sidebar-scroll-hidden" style="background-color: var(--bs-body-bg);"> 
         <script> $('body').addClass('d-none')</script>         
@@ -51,7 +51,7 @@
         <div class="container-fluid"> 
             <div class="row"> 
                 <nav id="sidebarMenu" class="bg-light col-lg-2 col-md-3 collapse d-md-block sidebar sidebar-scroll sidebar-scroll-hidden"> 
-                    <div class="align-content-start d-flex flex-column h-100 pt-3"> 
+                    <div class="align-content-start d-flex flex-column keep-scroll overflow-auto pt-3" style="height: 80%;"> 
                         <ul class="nav flex-column" id="IDNavPrimary"> 
                             <li class="d-none nav-item" id="id-nav-customers-list"> <a class="align-items-center d-flex nav-link" aria-current="page" href="01_Customers.html" id="id-nav-customers-list"> <span class="material-icons-outlined">group</span><span class="ms-3" translate_id="clients_list">List of Clients</span> </a> 
                             </li>                             
@@ -166,6 +166,8 @@
                             </li>                             
                             <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="96_alarmHistory.html"> <span class="material-icons-outlined">history</span> <span class="ms-3" translate_id="alarms_history">Alarms History</span> </a> 
                             </li>                             
+                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="97_reportAlarms.html"> <span class="material-icons-outlined">summarize</span> <span class="ms-3" translate_id="report_alarms">Alarms Report</span> </a> 
+                            </li>                             
                             <li class="nav-item" id="triggerIssue"> <a class="align-items-center d-flex nav-link" href="#"> <span class="material-icons-outlined">bug_report</span> <span class="ms-3" translate_id="issues">Report Issue</span> </a> 
                             </li>                             
                         </ul>                         
@@ -178,57 +180,55 @@
                             </li>                             
                             <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="#" id="id-user-logout"><span class="material-icons-outlined">logout</span><span class="ms-3">Logout</span> </a> 
                             </li>                             
-                        </ul>
-                        <span style="font-size: 10px;" id="github-version" class="p-2">Version</span> 
+                        </ul>                         <span style="font-size: 10px;" id="github-version" class="p-2">Version</span> 
                     </div>                     
                 </nav>                 
                 <main class="col-lg-10 col-md-9 ms-sm-auto px-md-4 bg-white-customized" id="id-column-master" data-pgc-field="id-column-master"> 
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"> 
-                        <h2 class="card-result" translate_id="list_clients_connected">List of Current Alarms </h2> 
-                        <div class="btn-toolbar mb-2 mb-md-0"> 
-                            <div class="btn-group me-2"> 
-</div>                             
+                    <div class="d-flex flex-column gap-4 justify-content-start"> 
+                        <div class="align-items-center border-bottom d-flex flex-md-nowrap flex-wrap justify-content-between  pb-2 pt-3"> 
+                            <h2 class="card-result" translate_id="list_clients_connected">List of Current Alarms </h2> 
+                            <div class="btn-toolbar mb-2 mb-md-0"> 
+                                <div class="btn-group me-2"> 
+</div>                                 
+                            </div>                             
                         </div>                         
-                    </div>
-                    <div style="height: 50px;">
-                        <div class="input-group mb-5 mt-3"> <span class="input-group-text material-icons-outlined">search</span>
-                            <input type="text" class="form-control" placeholder="filter" aria-label="date_range" aria-describedby="basic-addon1" id="filter"/>
-                        </div>
-                    </div>                     
-                    <div class="table-responsive"> 
-                        <table class="table table-hover table-responsive" id="alertTable"> 
-                            <thead class="thead-dark"> 
-                                <tr class="bg-dark"> 
-                                    <th class="align-items-center" id="firstColumn" style="color:#fff"> 
-                                        <div class="align-items-center d-flex"> <span>Timestart</span> <span class="icon-table d-none material-icons-outlined" id="iconTable1" style="color: #fff">expand_more</span> 
+                        <div style="height: 50px;"> 
+                            <div class="input-group "> <span class="input-group-text material-icons-outlined">search</span> 
+                                <input type="text" class="form-control" placeholder="filter" aria-label="date_range" aria-describedby="basic-addon1" id="filter"/> 
+                            </div>                             
+                        </div>                         
+                        <div style="height: 40px;" class="d-flex d-lg-flex flex-lg-wrap flex-wrap gap-3 justify-content-lg-start justify-content-start "> 
+                            <button type="button" class="active btn btn-light filter-btn" style="width: 150px; background: #C2DAFF;" data-filter="All">All</button>                             
+                            <button type="button" class="align-items-center btn btn-light d-flex filter-btn justify-content-between" style="background: #F0F1F2; width: 150px;" data-filter="Message"> <span class="material-icons-outlined">info</span> <span>Message</span> 
+                            </button>                             
+                            <button type="button" class="align-items-center btn btn-light d-flex filter-btn justify-content-between" style="background: #F0F1F2; width: 150px;" data-filter="Warning"> <span class="material-icons-outlined">warning_amber</span> <span>Warning</span> 
+                            </button>                             
+                            <button class="align-items-center btn btn-light d-flex filter-btn justify-content-between" style="background: #F0F1F2; width: 150px;" data-filter="Alarm" type="button"> <span class="material-icons-outlined">error_outline</span> <span>Alarms</span> 
+                            </button>                             
+                        </div>                         
+                        <ul id="alert_container" class="list-group mt-5 mt-lg-2"> 
+                            <li class="alert_list g-2 list-group-item d-none"> 
+                                <div class="card"> 
+                                    <div class="alert_body card-body"> 
+                                        <div class="align-items-center d-flex me-5"> <span class="material-icons-outlined"> notifications</span> 
                                         </div>                                         
-                                    </th>                                     
-                                    <th class="align-items-center" style="color: #fff"> 
-                                        <div class="align-items-center d-flex"> <span>Machine Name</span> <span class="icon-table d-none material-icons-outlined" id="iconTable2" style="color: #fff">expand_more</span> 
+                                        <div class="row row-cols-4 w-100"> 
+                                            <div> timesStart</div>                                             
+                                            <div>Machine</div>                                             
+                                            <div>Gravity</div>                                             
+                                            <div>CustomerName</div>                                             
+                                            <div class="col-12">Message</div>                                             
                                         </div>                                         
-                                    </th>                                     
-                                    <th class="align-items-center" style="color: #fff"> 
-                                        <div class="align-items-center d-flex"> <span>Gravity</span> <span class="icon-table d-none material-icons-outlined" id="iconTable3" style="color: #fff">expand_more</span> 
-                                        </div>                                         
-                                    </th>                                     
-                                    <th class="align-items-center" style="color: #fff"> 
-                                        <div class="align-items-center d-flex"> <span>Customer</span> <span class="icon-table d-none material-icons-outlined" id="iconTable4" style="color: #fff">expand_more</span> 
-                                        </div>                                         
-                                    </th>                                     
-                                    <th class="align-items-center" style="color: #fff"> 
-                                        <div class="align-items-center d-flex"> <span>Message</span> <span class="icon-table d-none material-icons-outlined" id="iconTable5" style="color: #fff;">expand_more</span> 
-                                        </div>                                         
-                                    </th>                                     
-                                </tr>                                 
-                            </thead>                             
-                            <tbody id="IDAlertActualBody"></tbody>                             
-                        </table>                         
+                                    </div>                                     
+                                </div>                                 
+                            </li>                             
+                        </ul>                         
                     </div>                     
                     <div class="modal fade pg-show-modal" id="modal1" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false"> 
-                        <div class="modal-dialog modal-dialog-centered modal-sm"> 
+                        <div class="align-items-center d-flex justify-content-center modal-dialog modal-dialog-centered modal-sm"> 
                             <lottie-player src="https://assets9.lottiefiles.com/private_files/lf30_bU3Dr6.json" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay></lottie-player>                             
                         </div>                         
-                    </div>                     
+                    </div>
                 </main>                 
             </div>             
         </div>         

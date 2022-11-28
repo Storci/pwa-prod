@@ -94,10 +94,48 @@ $("th").click(function() {
 
 // Funzione di ricerca nella tabella
 $("#filter").on("keyup", function(){
-  let value = $(this).val()
-  $("#IDAlertHistoryBody tr").filter(function(){
-    $(this).toggle($(this).text().indexOf(value) > -1)
-  })
+  let value = $(this).val().toLowerCase()
+	let btn_value = $('.filter-btn.active').attr('data-filter')
+
+	if(btn_value == "All"){
+		$("#alert_container li").filter(function(){
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		})
+	}else{
+		$("#alert_container li").filter(function(){
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && $(this).hasClass(btn_value))
+		})
+	}
+})
+
+
+/**** Funzione per il filtro Rapido della lista attraverso la pressione del pulsante */
+$('.filter-btn').click(function(){
+	let value = $('#filter').val().toLowerCase()
+	let btn_value = $(this).attr('data-filter')
+	let color = '#C2DAFF'
+
+	if(btn_value == 'Warning'){
+		color = "#fb8c0066"
+	}
+	else if(btn_value == "Alarm"){
+		color = "#e5393566"
+	}
+	else if(btn_value =="Message"){
+		color = '#fdd83566'
+	}
+
+	$(this).addClass('active').css("backgroundColor", color).siblings().removeClass('active').css("backgroundColor", '#F0F1F2')
+
+	if(btn_value == "All"){
+		$("#alert_container li").filter(function(){
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		})
+	}else{
+		$("#alert_container li").filter(function(){
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && $(this).hasClass(btn_value))
+		})
+	}
 })
 
 // *******************************************
@@ -147,25 +185,57 @@ function insertionSort(table, column, dir){
 
 // Funzione per recuperare i dati da tw per mettere nella tabella
 function getAlarmsNotifications(idTable, startDate, endDate, filter, getHistory, customerName){
-	tw.getListAlert(startDate, endDate, filter, getHistory,customerName)
+	customerName = customerName.replace(/_/g, ' ')
+	tw.service_10_getAlerts(startDate, endDate, filter, getHistory,customerName)
 	.then((list)=>{
-		$(idTable).empty()
+    setTimeout(function() {	$('#modal1').modal("hide") }, 500);
+		//$(idTable).empty()
 		list.rows.forEach((el,i) =>{
 			let timeStart = new Date(el.TimeStart).toLocaleString();
-			let timeEnd = new Date(el.TimeStart).toLocaleString();
+			let timeEnd = new Date(el.TimeEnd).toLocaleString();
 
-			let id = "IDHistoryTableRow" + i;
-			let row = '<tr id=' + id + ' class="hover_tr card-body" style="border-style: none;background: var(--bs-table-bg);">'
-			row    += '    <td style="font-size: 12px;border-style: none;">' + timeStart + '</td>'
-			row    += '    <td style="font-size: 12px;border-style: none;">' + timeEnd + '</td>'
-			row    += '    <td style="font-size: 12px;border-style: none;">' + el.CustomerName  + '</td>'
-			row    += '    <td style="font-size: 12px;border-style: none;">' + el.MachineName    + '</td>'
-			row    += '    <td style="font-size: 12px;border-style: none;">' + el.Gravity + '</td>'
-			row    += '    <td style="font-size: 12px;border-style: none;">' + el.Message  + '</td>'
-			row    += '</tr>'
-			// Aggiunge la riga alla tabella
-			$(idTable).append(row);
-		})
+			let color = 'rgba(255,255,255,0)'
+			let icon
+			let filter_type ="All"
+
+
+			if(el.Type== 'WRN'){
+				color = "#fb8c0066"
+				icon = 'warning_amber'
+				filter_type = 'Warning'
+			}
+			else if(el.Type == "ALM"){
+				color = "#e5393566"
+				icon = 'error_outline'
+				filter_type = 'Alarm'
+			}
+			else if(el.Type =="MSG"){
+				color = '#fdd83566'
+				icon  = 'info'
+				filter_type = 'Message'
+			}
+
+			/****Lista generata */
+			let lista = '<li class="alert_list list-group-item mb-2 ' + filter_type + '"'
+			lista +='style="background: ' + color + '">'
+			lista +='<div class="card"> '
+			lista +='<div class="alert_body card-body ">'
+			lista +='<div class="align-items-center d-flex me-5">'
+			lista += '<span class="material-icons-outlined">'+icon+'</span>'
+			lista +='</div> '
+			lista +='<div class="row row-cols-2 row-cols-lg-4 w-100">'
+			lista +='<div class="mb-2"> '+ el.CustomerName.replace(/_/g, ' ') +'</div>'
+			lista +='<div class="mb-2"> '+ el.MachineName +'</div>'
+			lista +='<div class="mb-2">'+ timeStart +'</div>'
+			lista +='<div class="mb-2">'+ timeEnd +'</div>'
+			//lista +='<div> '+ el.Gravity+'</div>'
+			lista +='<div class="col-12 mt-2"> '+ el.Message+'</div>'
+			lista +='</div>'
+			lista +='</div>'
+			lista +='</div>'
+			lista +='</li> '
+			$('#alert_container').append(lista);
+	})
 		$('#modal1').modal("hide")
 	})
 	.catch((err)=>{

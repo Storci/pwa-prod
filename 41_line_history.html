@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en" class="bg-white" data-pgc-master="00_master.html">
     <head data-pgc-field="head">
         <meta charset="utf-8"/>
@@ -7,7 +7,7 @@
         <meta name="description" content=""/>
         <meta name="author" content=""/>
         <link rel="icon" href="./assets/img/icon_round_storci.svg" type="image/x-icon"/>
-        <title>Dashboard Linea</title>
+        <title>IoT Storci</title>
         <!-- MANIFEST -->
         <link rel="manifest" href="./manifest.webmanifest"/>
         <!-- carica l'immagine da usare nell'icona dell'iphone -->
@@ -63,7 +63,7 @@
         <div class="container-fluid">
             <div class="row">
                 <nav id="sidebarMenu" class="bg-light col-lg-2 col-md-3 collapse d-md-block sidebar sidebar-scroll sidebar-scroll-hidden">
-                    <div class="align-content-start d-flex flex-column h-100 pt-3">
+                    <div class="align-content-start d-flex flex-column keep-scroll overflow-auto pt-3" style="height: 80%;">
                         <ul class="nav flex-column" id="IDNavPrimary">
                             <li class="d-none nav-item" id="id-nav-customers-list"> <a class="align-items-center d-flex nav-link" aria-current="page" href="01_Customers.html" id="id-nav-customers-list"> <span class="material-icons-outlined">group</span><span class="ms-3" translate_id="clients_list">List of Clients</span> </a>
                             </li>
@@ -152,7 +152,7 @@
                                         </li>
                                         <li class="d-none nav-item" data-pg-name="pasta_instant" id="id-nav-pasta-instant-line-1"> <a class="align-items-center d-flex nav-link" aria-current="page" href="54_line_pasta_instant.html"><span class="material-icons-outlined">group_work</span><span class="ms-3" translate_id="pasta_instant">Pasta Instant</span>&nbsp;</a>
                                         </li>
-                                        <li class="d-none nav-item" data-pg-name="predryer" id="id-nav-predryer-line-1"> <a class="align-items-center d-flex nav-link" aria-current="page" href="51_line_predryer.html"><span class="material-icons-outlined">group_work</span><span class="ms-3" translate_id="pre-dryer">Pre-Dryer</span>&nbsp;</a> 
+                                        <li class="d-none nav-item" data-pg-name="predryer" id="id-nav-predryer-line-1"> <a class="align-items-center d-flex nav-link" aria-current="page" href="51_line_predryer.html"><span class="material-icons-outlined">group_work</span><span class="ms-3" translate_id="pre-dryer">Pre-Dryer</span>&nbsp;</a>
                                         </li>
                                         <li class="d-none nav-item" data-pg-name="omnidryer" id="id-nav-omnidryer-line-1"> <a class="align-items-center d-flex nav-link" aria-current="page" href="52_line_omnidryer.html"><span class="material-icons-outlined">group_work</span><span class="ms-3" translate_id="omnidryer">Omnidryer</span>&nbsp;</a>
                                         </li>
@@ -178,9 +178,80 @@
                             </li>
                             <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="96_alarmHistory.html"> <span class="material-icons-outlined">history</span> <span class="ms-3" translate_id="alarms_history">Alarms History</span> </a>
                             </li>
+                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="97_reportAlarms.html"> <span class="material-icons-outlined">summarize</span> <span class="ms-3" translate_id="report_alarms">Alarms Report</span> </a>
+                            </li>
                             <li class="nav-item" id="triggerIssue"> <a class="align-items-center d-flex nav-link" href="#"> <span class="material-icons-outlined">bug_report</span> <span class="ms-3" translate_id="issues">Report Issue</span> </a>
                             </li>
                         </ul>
+                    </div>
+                    <div class="align-content-end bg-light d-flex fixed-bottom flex-column position-absolute">
+                        <h6 class="align-items-center d-flex justify-content-between mb-1 mt-4 px-3 sidebar-heading text-secondary"> <span id="id-username">Utente</span><span class="material-icons-outlined md-24">person</span> </h6>
+                        <ul class="flex-column mb-2 nav">
+                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="94_accountSettings.html" id=""> <span class="material-icons-outlined">settings</span> <span class="ms-3" translate_id="profile_settings">Profile Settings</span> </a>
+                                <!-- <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="90_login.html" id="id-user-login"> <span class="material-icons-outlined">login</span> <span class="ms-3">Login</span> </a>--->
+                            </li>
+                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="#" id="id-user-logout"><span class="material-icons-outlined">logout</span><span class="ms-3">Logout</span> </a>
+                            </li>
+                        </ul>                         <span style="font-size: 10px;" id="github-version" class="p-2">Version</span>
+                    </div>
+                </nav>
+                <main class="col-lg-10 col-md-9 ms-sm-auto px-md-4 bg-white-customized" id="id-column-master" data-pgc-field="id-column-master">
+                    <div class="row row-cols-1">
+                        <div class="mb-3 mt-3">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted" translate_id="production_list">Lista Produzioni Storiche</h6>
+                                    <div style="height: 50px;">
+                                        <div class="input-group mb-5 mt-3"> <span class="input-group-text material-icons-outlined">date_range</span>
+                                            <input type="text" class="form-control" placeholder="date picker" aria-label="date_range" aria-describedby="basic-addon1" id="dateTimePicker"/>
+                                        </div>
+                                    </div>
+                                    <div style="height: 50px;">
+                                        <div class="input-group mb-5 mt-3"> <span class="input-group-text material-icons-outlined">search</span>
+                                            <input type="text" class="form-control" placeholder="filter" aria-label="date_range" aria-describedby="basic-addon1" id="filter"/>
+                                        </div>
+                                    </div>
+                                    <div class="tableDiv">
+                                        <table id="IDHistoryTable" class="table table-hover table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th class="align-items-center card_heading_label fw-light text-muted" id="firstColumn">
+                                                        <div class="align-items-center d-flex"> <span translate_id="start_production">Inizio Produzione</span> <span class="icon-table d-none material-icons-outlined" id="iconTable1">expand_more</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="align-items-center card_heading_label fw-light text-muted">
+                                                        <div class="align-items-center d-flex"> <span translate_id="end_production">Fine Produzione</span> <span class="icon-table d-none material-icons-outlined" id="iconTable2">expand_more</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="fw-light text-muted card_heading_label">
+                                                        <div class="align-items-center d-flex"> <span translate_id="recipe_name">Nome Ricetta</span> <span class="icon-table d-none material-icons-outlined" id="iconTable3">expand_more</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="fw-light text-muted card_heading_label">
+                                                        <div class="align-items-center d-flex"> <span translate_id="duration">Durata</span> <span class="icon-table d-none material-icons-outlined" id="iconTable4">expand_more</span>
+                                                        </div>
+                                                    </th>
+                                                    <th class="fw-light text-muted card_heading_label">
+                                                        <div class="align-items-center d-flex"> <span translate_id="dryer">Cella</span> <span class="icon-table d-none material-icons-outlined" id="iconTable5">expand_more</span>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="h-50 pg-empty-placeholder card-result" id="IDHistoryTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-100 mb-3 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted card_heading_label" translate_id="history_chart">Grafico Storico</h6>
+                                    <div class="pg-empty-placeholder" id="IDLegendHistoryProduction"></div>
+                                    <div class="pg-empty-placeholder" id="IDTrendHistoryProduction" style="height: 50vh;"></div>
+                                </div>                                 <span type="button" class="bg-white btn btn-light d-inline text-end text-primary" id="fullscreenHistory">Fullscreen</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="align-content-end bg-light d-flex fixed-bottom flex-column position-absolute">
                         <h6 class="align-items-center d-flex justify-content-between mb-1 mt-4 px-3 sidebar-heading text-secondary"> <span id="id-username">Utente</span><span class="material-icons-outlined md-24">person</span> </h6>
