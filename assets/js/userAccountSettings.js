@@ -6,6 +6,17 @@ import * as lang from "./Global/Common/Translation.js"
 fb.onAuthStateChanged_2()
 lang.getLanguage()
 
+// Document ready function to ensure translation happens after all elements are loaded
+$(document).ready(function() {
+  // Translate the page content
+  lang.getLanguage();
+});
+
+$("#modal1").css("display", "none");
+
+
+
+
 // *************************************
 // ********** CAMBIO PASSWORD **********
 // *************************************
@@ -203,6 +214,7 @@ firebase.auth().onAuthStateChanged(user => {
     }else{
       $("#notification-toggle").prop('checked', false)
     }
+    setTimeout(function() {	$('#modal1').modal("hide") }, 500);
   })
 })
 

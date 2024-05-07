@@ -10,6 +10,8 @@ const urlParams = new URLSearchParams(queryString)
 // Recupera l'entity name della thing
 let entityName = urlParams.get('entityName')
 
+$('#modal1').modal("show")
+
 // Recupera il nome dell'utente da firebase, controlla che sia loggato.
 // Nel caso non fosse loggato richiama la pagina di login
 fb.onAuthStateChanged_2()
@@ -116,6 +118,7 @@ query += 'mean("Impasto_SP_Impasto_Totale") as "SP_Impasto", '
 query += 'mean("Pressa_Motori_Estrusore_PV_Pressione") as "PV_Pressione", '
 query += 'mean("Impasto_PV_Dosatore_Acqua") as "PV_Portata_Acqua", '
 query += 'mean("Impasto_SP_Dosatore_Acqua_Litri") as "SP_Portata_Acqua", '
+
 query += 'mean("Impasto_PV_Temperatura_Acqua") as "PV_Temp_Acqua", '
 query += 'mean("Impasto_SP_Temperatura_Acqua") as "SP_Temp_Acqua", '
 query += 'mean("Pressa_Motori_Estrusore_PV_Calorie") as "PV_Consumi" '
@@ -289,16 +292,16 @@ function listHistoryProduction(entityName, timeStart, timeEnd){
 				})
 				.catch(e => {console.log(e)})
 			})
-			/*let elem = document.getElementById('firstColumn')
-			// Definisce la variabile come click event
-				let clickEvent = new Event('click');
-			// Esegue l'evento dell'elemento, in questo modo simula il click
-			// sulla prima riga della tabella, e viene caricato il grafico
-				elem.dispatchEvent(clickEvent)*/
+		
 
-			})
 		})
+		setTimeout(function() {	$('#modal1').modal("hide") }, 500);
+
+	})
+	.catch(e => {console.log(e)})
+	
 	}
+	
 
 // Pulsanti per l'esportazione del grafico in png
 $('#IDButtonExportTrendActualProduction').click(el => { am.getExport(chartActualProduction) })
@@ -360,6 +363,8 @@ function setCardsValue(entityName, chart){
 		    { value: info.Impasto_SP_Dosatore_Polvere_1, 	 category: 'Additivo', 			   unit: 'kg/h', color: am4core.color('#198754') },
 		  ]
 		  chart.data = data
+		  setTimeout(function() {	$('#modal1').modal("hide") }, 500);
+
 		})
 		.catch(error => console.error(error))
 }

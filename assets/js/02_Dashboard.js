@@ -5,24 +5,20 @@ import * as fb from "./Global/Firebase/firebase_auth_module.js"
 import * as lang from "./Global/Common/Translation.js"
 import * as common from "./Global/Common/commonFunctions.js"
 
-
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 
 
-// definisce l'url di base della pagina attuale (in questo caso della pagina index.html).
-// il risultato è http(s)://xxx.xxx.xxx.xxx:xxxx
-// baseURL verrà utilizzato come base per il cambio pagina.
-/*
-let baseURL = window.location.protocol + "//" + window.location.host
-let pageURL = window.location.href
-if(window.location.protocol == 'https:'){
-  baseURL += '/pwa'
-}
-*/
-// Recupera il nome dell'utente da firebase, controlla che sia loggato.
-// Nel caso non fosse loggato richiama la pagina di login
-//fb.onAuthStateChanged_2()
+/*var loader = document.querySelector(".loader")
+
+window.addEventListener("load", vanish);
+
+function vanish() {
+  loader.classList.add("disppear");
+}*/
+
+$('#modal1').modal("show")
+
 // Recupera dei dati dalle local storage
 let selectedCustomer = localStorage.getItem("global_selected_customer")
 let selectedLine 		 = localStorage.getItem("global_selected_line")
@@ -34,12 +30,15 @@ $('#IDCustomerName').text(selectedCustomer.replace(/_/g, " "))
 // Vengono sostituiti tutti gli underscore presenti nel nome
 $("#IDBreadcrumbCustomer").text(selectedCustomer.replace(/_/g, ' '));
 // Recupera la lingua utilizzata dall'utente e sostituisce tutti i testi
-// ATTENZIONE - Questa istruzione traduce solamente i testi statici e non
+// ATTENZIONE - Questa istruzione traduce sia i testi statici e dinamici
 // i testi caricati dalle funzioni.
-lang.getLanguage()
+  lang.getLanguage()
 // Recupera il nome dell'utente da firebase, controlla che sia loggato.
 // Nel caso non fosse loggato richiama la pagina di login
 fb.onAuthStateChanged_2()
+
+
+
 
 $('#id-nav-dashboard').addClass('active')
 
@@ -92,6 +91,7 @@ tw.service_02_getLinesGeneralInfo(entityName)
   }else{
     $('#IDdivLinee').addClass('d-none')
   }
+  setTimeout(function() {	$('#modal1').modal("hide") }, 500);
 })
 .catch(e => {
   console.warn(e)
@@ -146,8 +146,9 @@ tw.service_01_getDryersGeneralInfo(entityName)
       setDryersTrend(chart, query)
     })
   }else{
-    $('#IDdivDryers').addClass('d-none')
+  //  $('#IDdivDryers').addClass('d-none')
   }
+  setTimeout(function() {	$('#modal1').modal("hide") }, 500);
 })
 .catch(e => {
   $('#IDdivDryers').addClass('d-none')
@@ -177,7 +178,7 @@ function setLineCardsValue(entityName){
 }
 
 
-function setDryersCardsValue(entityName){
+/*function setDryersCardsValue(entityName){
 	// Richiama il servizio di thingworx.
 	tw.service_01_getDryersGeneralInfo(entityName)
 		.then(result => {
@@ -190,6 +191,21 @@ function setDryersCardsValue(entityName){
         })
       })
 		.catch(error => console.error(error))
+}*/
+function setDryersCardsValue(entityName) {
+  tw.service_01_getDryersGeneralInfo(entityName)
+    .then(result => {
+      if (result.entityName) {
+        let keyProperty = result.entityName.replace(/\./g, '');
+        keyProperty = keyProperty.toLowerCase();
+        let key = '[' + keyProperty + ']';
+        $(key).each(function() {
+          $(this).text(result[$(this).attr(keyProperty)]);
+        });
+      }
+      setTimeout(function() {	$('#modal1').modal("hide") }, 500);
+    })
+    .catch(error => console.error(error));
 }
 
 function setDryersTrend(chart, query){
@@ -223,6 +239,7 @@ function setDryersTrend(chart, query){
     })
     // Aggiorna il grafico con i dati recuperati
     chart.data = data;
+    //setTimeout(function() {	$('#modal1').modal("hide") }, 500);
   })
 }
 
@@ -232,16 +249,11 @@ function createDivLine(IDdiv, entityName){
   let html = ''
 
   html += '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" data-pg-collapsed>'
-  html += '<h1 class="h2 card-result" ' + keyProperty + '="nome_linea">Linea</h1>'
+  html += '<h1 class="h2 card-result" translate_id ="line">Line</h1>'
   html +=   '<div class="btn-toolbar mb-2 mb-md-0">'
   html +=       '<div class="btn-group me-2"></div>'
   html +=   '</div>'
   html += '</div>'
- /*
-  html += '<div class="divClientiConnessi" style="margin-top: 50px;">'
-  html +=     '<h5 style="margin: 0;padding-right: 12px;padding-left: 12px;color: var(--bs-heading-medium-emphasis);font-size: 1.2rem;" ' + keyProperty + '="nome_linea">LINEA</h5>'
-  html += '</div>'
-  */
   html += '<div id="IDdivLineData" class="row g-0 row-cols-1 row-cols-lg-3 gy-3" style="min-height: 300px;">'
   html +=     '<div class="col col-customer col-sx-padding">'
   html +=         '<div class="card card-h-100" style="border-radius: 0px;">'
@@ -290,29 +302,8 @@ function createDivLine(IDdiv, entityName){
   //html += '<div style="padding-right: 20px;padding-left: 20px;margin-bottom: 80px;"><button id="IDLinkLine" entityname="' + entityName + '" class="btn btn-primary" type="button" style="min-width: 100%;">LINEA DASHBOARD</button></div>'
 
   $(IDdiv).append(html)
-
-/*
-  let navitem = ''
-  navitem += '<li class="nav-item">'
-  navitem +=   '<a class="nav-link" href="#">'
-  navitem +=      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">'
-  navitem +=          '<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>'
-  navitem +=          '<polyline points="13 2 13 9 20 9"></polyline>'
-  navitem +=      '</svg>'
-  navitem +=      '<span class="ms-1" ' + keyProperty + '="nome_linea">Linea</span>'
-  navitem +=   '</a>'
-  navitem += '</li>'
-
-  let idnav = '#IDNavPrimary'
-  $(idnav).append(navitem)
-
-  */
-/*
-  $('#IDLinkLine').click(function() {
-    localStorage.setItem('global_selected_line_entityName', $(this).attr('entityname'))
-    // Carica la pagina.
-    window.location.href = baseURL + "/Customers/CustomerInfo/Lines/LinesInfo.html"
-  })*/
+  //funzione che richiamo la traduzione della lingua
+  lang.getLanguage()
 }
 
 
@@ -322,16 +313,11 @@ function createDivDryers(IDdiv, entityName){
   let html = ''
 
   html += '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" data-pg-collapsed>'
-  html += '<h1 class="h2 card-result">Dryers</h1>'
+  html += '<h1 class="h2 card-result" translate_id ="dryer">Dryer</h1>'
   html +=   '<div class="btn-toolbar mb-2 mb-md-0">'
   html +=       '<div class="btn-group me-2"></div>'
   html +=   '</div>'
   html += '</div>'
-  /*
-  html += '<div id="IDdivNameDryers" class="divClientiConnessi">'
-  html +=     '<h5 style="margin: 0;padding-right: 12px;padding-left: 12px;color: var(--bs-heading-medium-emphasis);font-size: 1.2rem;">CELLE</h5>'
-  html += '</div>'
-  */
   html += '<div id="IDDryersData" class="row g-0 row-cols-1 row-cols-lg-4 d-flex gy-3" style="min-height: 300px;">'
   html +=     '<div class="col col-customer col-sx-padding">'
   html +=         '<div class="card card-h-100" style="border-radius: 0px;">'
@@ -344,7 +330,7 @@ function createDivDryers(IDdiv, entityName){
   html +=     '<div class="col col-customer col-padding">'
   html +=         '<div class="card card-h-100" style="border-radius: 0px;">'
   html +=             '<div class="card-body" style="padding: 1.5rem;">'
-  html +=                 '<h6 class="text-muted card-subtitle mb-2" style="color: var(--bs-heading-medium-emphasis);font-size: 1rem;" translate_id="actual_alarms">Room Temperature</h6>'
+  html +=                 '<h6 class="text-muted card-subtitle mb-2" style="color: var(--bs-heading-medium-emphasis);font-size: 1rem;" translate_id="room_temperature">Room Temperature</h6>'
   html +=                 '<h4 class="card-title thingworx-property-value" ' + keyProperty + '="temperatura_ambiente" style="color: var(--bs-heading-high-emphasis);font-size: 1.2rem;">Title</h4>'
   html +=             '</div>'
   html +=         '</div>'
@@ -360,7 +346,7 @@ function createDivDryers(IDdiv, entityName){
   html +=     '<div class="col col-customer col-dx-padding">'
   html +=         '<div class="card card-h-100" style="border-radius: 0px;">'
   html +=             '<div class="card-body" style="padding: 1.5rem;">'
-  html +=                 '<h6 class="text-muted card-subtitle mb-2" style="color: var(--bs-heading-medium-emphasis);font-size: 1rem;" translate_id="actual_alarms">Number of Alarms Present</h6>'
+  html +=                 '<h6 class="text-muted card-subtitle mb-2" style="color: var(--bs-heading-medium-emphasis);font-size: 1rem;" translate_id="number_of_alarms">Number of Alarms Present</h6>'
   html +=                 '<h4 class="card-title thingworx-property-value" ' + keyProperty + '="allarmi_attivi" style="color: var(--bs-heading-high-emphasis);font-size: 1.2rem;">Title</h4>'
   html +=             '</div>'
   html +=         '</div>'
@@ -385,29 +371,8 @@ function createDivDryers(IDdiv, entityName){
   html +=         '</div>'
   html +=     '</div>'
   html += '</div>'
-//  html += '<div style="padding-right: 20px;padding-left: 20px;margin-bottom: 80px;"><button id="IDLinkDryers" entityname="' + entityName + '" class="btn btn-primary" type="button" style="min-width: 100%;">CELLE DASHBOARD</button></div>'
-
+  // tramite la funzione append aggiungo html dinamico alla al div IDdiv
   $(IDdiv).append(html)
-
-/*
-  let navitem = ''
-  navitem += '<li class="nav-item">'
-  navitem +=   '<a class="nav-link" href="#">'
-  navitem +=      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">'
-  navitem +=          '<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>'
-  navitem +=          '<polyline points="13 2 13 9 20 9"></polyline>'
-  navitem +=      '</svg>'
-  navitem +=      '<span class="ms-1">Celle</span>'
-  navitem +=   '</a>'
-  navitem += '</li>'
-
-  let idnav = '#IDNavPrimary'
-  $(idnav).append(navitem)
-  */
-/*
-  $('#IDLinkDryers').click(function() {
-    // Carica la pagina.
-    window.location.href = baseURL + "/Customers/CustomerInfo/Dryers/DryersInfo.html";
-  })
-  */
+// funzione per la traduzione che viene richiamato quando 
+  lang.getLanguage()
 }

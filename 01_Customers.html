@@ -26,14 +26,6 @@
         <!-- Custom styles for this template -->         
         <link rel="stylesheet" href="assets/css/dashboard.css" media="print" onload="this.media='all'"/> 
         <link rel="stylesheet" href="assets/css/storci-styles.css" media="print" onload="this.media='all'"/> 
-        <!-- AM4CORE CHART -->         
-        <!--
-        <script defer src="https://cdn.amcharts.com/lib/4/core.js"></script>
-        <script defer src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-        <script defer src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-        <script defer src="https://cdn.amcharts.com/lib/4/themes/dark.js"></script>
-        <script defer src="//cdn.amcharts.com/lib/4/plugins/rangeSelector.js"></script>
-         -->         
         <!-- The core Firebase JS SDK is always required and must be listed first -->         
         <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>         
         <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>         
@@ -43,15 +35,16 @@
         <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js" type="module"></script>  -->         
         <script defer src="./assets/js/Global/Firebase/firebase_config.js"></script>         
         <!-- CUSTOM SCRIPT -->         
-        <script src="./assets/js/sidebar.js" type="module"></script>         
+        <script defer src="./assets/js/sidebar.js" type="module"></script>         
         <script src="./firebase-messaging-sw.js" type="module"></script>         
         <script defer src="./assets/js/Global/Firebase/firebase_messaging_init.js" type="module"></script>         
         <script src="./assets/js/Global/Common/Translation.js" type="module"></script>         
         <script src="./assets/js/Global/Common/Theme.js" type="module"></script>         
-        <script defer src="./assets/js/01_Customers.js" type="module"></script>
+        <script defer src="./assets/js/01_Customers.js" type="module"></script>         
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     </head>     
     <body class="sidebar-scroll-hidden" style="background-color: var(--bs-body-bg);"> 
-        <script> $('body').addClass('d-none')</script>         
+        <script> //$('body').addClass('d-none')</script>         
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"> <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><span id="id-customer-name">Storci</span></a> 
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> 
             </button>             
@@ -185,7 +178,7 @@
                                         <li class="d-none nav-item" data-pg-name="stacker" id="id-nav-stacker-line-2"> <a class="align-items-center d-flex nav-link" aria-current="page" href="53_line_stacker.html"><span class="material-icons-outlined">group_work</span><span class="ms-3" translate_id="">Impilatore</span>&nbsp;</a> 
                                         </li>                                         
                                     </div>                                     
-                                </div>
+                                </div>                                 
                                 <div class="accordion-item bg-light border-bottom-0 border-top-0 d-none" id="id-accordion-line-3"> 
                                     <h2 class="accordion-header bg-light" id="id-header-accordion-line-3"> <button class="accordion-button bg-light collapsed pb-2 pe-3 ps-3 pt-2 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#id-collapse-panel-line-3" aria-expanded="false" aria-controls="id-collapse-panel-line-3" id="id-btn-accordion-line-3" translate_id="pasta_line">Pasta Line 03</button></h2> 
                                     <div id="id-collapse-panel-line-3" class="accordion-collapse collapse ps-3" aria-labelledby="collapse3" data-bs-parent="#panels1"> 
@@ -236,7 +229,7 @@
                             <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="94_accountSettings.html" id=""> <span class="material-icons-outlined">settings</span> <span class="ms-3" translate_id="profile_settings">Profile Settings</span> </a> 
                                 <!-- <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="90_login.html" id="id-user-login"> <span class="material-icons-outlined">login</span> <span class="ms-3">Login</span> </a>--->                                 
                             </li>                             
-                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="90_signIn.html" id="id-user-logout"><span class="material-icons-outlined">logout</span><span class="ms-3">Logout</span> </a> 
+                            <li class="nav-item"> <a class="align-items-center d-flex nav-link" href="#" id="id-user-logout"><span class="material-icons-outlined">logout</span><span class="ms-3">Logout</span> </a> 
                             </li>                             
                         </ul>                         <span style="font-size: 10px;" id="github-version" class="p-2">Version</span> 
                     </div>                     
@@ -258,22 +251,9 @@
                         </div>                         
                     </div>                     
                     <div class="gy-3 mb-4 pg-empty-placeholder row row-cols-1 row-cols-lg-4 row-cols-md-2 row-cols-sm-1" id="IDRowDisconnected" data-pg-name="row-customer-disconnected" title="Clienti Disconnessi"></div>                     
-                    <div class="modal fade pg-show-modal" id="modal1" tabindex="-1" role="dialog" aria-hidden="true"> 
-                        <div class="modal-dialog modal-dialog-centered modal-lg"> 
-                            <div class="modal-content"> 
-                                <div class="bg-dark modal-header"> 
-                                    <h4 class="fw-bold me-2 modal-title text-light" id="modalTitle">Modal title</h4> <span class="border border-1 border-warning d-none fw-bold me-1 ms-1 pb-1 pe-2 ps-2 pt-1 rounded rounded-pill text-warning" id="pre-release-tag">Pre-release</span> <span class="border border-1 border-success fw-bold me-1 ms-1 pb-1 pe-2 ps-2 pt-1 rounded rounded-pill text-success">Latest</span> 
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>                                     
-                                </div>                                 
-                                <div class="modal-body"> <span id="modalSpan">This is a span.</span> 
-                                </div>                                 
-                                <div class="modal-footer"> 
-                                    <div class="form-check form-switch mb-0"> 
-                                        <input type="checkbox" class="form-check-input" id="modalCheckShow"/> 
-                                        <label class="form-check-label" for="formInput10">Not show again</label>                                         
-                                    </div>                                     
-                                </div>                                 
-                            </div>                             
+                    <div class="modal fade pg-show-modal" id="modal1" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false"> 
+                        <div class="align-items-center d-flex justify-content-center modal-dialog modal-dialog-centered modal-sm"> 
+                            <lottie-player src="https://assets9.lottiefiles.com/private_files/lf30_bU3Dr6.json" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay></lottie-player>                             
                         </div>                         
                     </div>
                 </main>                 

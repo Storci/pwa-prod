@@ -4,6 +4,16 @@ import * as fb from "./Global/Firebase/firebase_auth_module.js"
 import * as lang from "./Global/Common/Translation.js"
 //import { Octokit, App } from "https://cdn.skypack.dev/octokit";
 
+
+$('#modal1').modal("show")
+/*var loader = document.querySelector(".loader")
+
+window.addEventListener("load", vanish);
+
+function vanish() {
+  loader.classList.add("disppear");
+}*/convertText
+
 // Recupera il nome dell'utente da firebase, controlla che sia loggato.
 // Nel caso non fosse loggato richiama la pagina di login
 fb.onAuthStateChanged_2()
@@ -21,6 +31,8 @@ tw.getCustomersList()
     setInterval(getCustomerInfo, 10000, customerList)
 
     localStorage.setItem('customerList', JSON.stringify(customerList))
+	//aspetto la risposta del server nel momento in cui la chiamata venga fatto completamente il spinner dovrebbe sparire
+	setTimeout(function() {	$('#modal1').modal("hide") }, 500);
 })
 .catch(e => console.error(e))
 
@@ -123,9 +135,11 @@ function createCard(customerList){
 		if(el.isConnected){
 			// Aggiunge la card alla lista
 			$("#IDRowConnected").append(card)
+			lang.getLanguage()
 		}else{
 			// Aggiunge la card alla lista
 			$("#IDRowDisconnected").append(card)
+			lang.getLanguage()
 		}
 
 		// Abilita onclick sulla card
@@ -137,6 +151,7 @@ function createCard(customerList){
 			window.location.href = "./02_Dashboard.html?entityName=" + el.name
 		}
 	})
+	
 }
 
 // La funzione recupera i dati di ogni cliente da thingworx.
