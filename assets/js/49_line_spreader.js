@@ -3,6 +3,8 @@ import * as tw from "./Global/Thingworx/thingworx_api_module.js"
 import * as am from "./Global/amchart/amchart_functions.js"
 import * as fb from "./Global/Firebase/firebase_auth_module.js"
 import * as lang from "./Global/Common/Translation.js"
+import * as common from "./Global/Common/commonFunctions.js"
+
 
 
 const queryString = window.location.search
@@ -13,9 +15,7 @@ let entityName = urlParams.get('entityName')
 
 // Recupera il nome dell'utente da firebase, controlla che sia loggato.
 // Nel caso non fosse loggato richiama la pagina di login
-fb.onAuthStateChanged_2()
 
-//$('#modal1').modal("show")
 
 showSpinner()
 
@@ -32,6 +32,7 @@ function hideSpinner() {
 	document.body.removeEventListener('click', hideSpinner);
 }
 
+lang.getLanguage()
 // Definisce le variabili come date
 let timeStartHistory = new Date()
 let timeEndHistory = new Date()
@@ -44,49 +45,53 @@ timeStartHistory.setDate(timeStartHistory.getDate() - 14)
 // yyyy-MM-dd
 let disp_timeStart = common.getDate(timeStartHistory)
 let disp_timeEnd = common.getDate(timeEndHistory)
+$(document).ready(function(){
+	$('#dateTimePicker').daterangepicker({
+		"locale": {
+			"format": "YYYY/MM/DD",
+			"separator": " - ",
+			"applyLabel": "Apply",
+			"cancelLabel": "Cancel",
+			"fromLabel": "From",
+			"toLabel": "To",
+			"customRangeLabel": "Custom",
+			"weekLabel": "W",
+			"daysOfWeek": [
+				"Su",
+				"Mo",
+				"Tu",
+				"We",
+				"Th",
+				"Fr",
+				"Sa"
+			],
+			"monthNames": [
+				"January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September",
+				"October",
+				"November",
+				"December"
+			],
+			"firstDay": 1
+		},
+		"startDate": disp_timeStart,
+		"endDate": disp_timeEnd
+	}, function (start, end, label) {
+		listHistoryProduction(entityName, start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'))
+		timeStartZoom = timeStartHistory
+		timeEndZoom = timeEndHistory
+	});
 
-$('#dateTimePicker').daterangepicker({
-	"locale": {
-		"format": "YYYY/MM/DD",
-		"separator": " - ",
-		"applyLabel": "Apply",
-		"cancelLabel": "Cancel",
-		"fromLabel": "From",
-		"toLabel": "To",
-		"customRangeLabel": "Custom",
-		"weekLabel": "W",
-		"daysOfWeek": [
-			"Su",
-			"Mo",
-			"Tu",
-			"We",
-			"Th",
-			"Fr",
-			"Sa"
-		],
-		"monthNames": [
-			"January",
-			"February",
-			"March",
-			"April",
-			"May",
-			"June",
-			"July",
-			"August",
-			"September",
-			"October",
-			"November",
-			"December"
-		],
-		"firstDay": 1
-	},
-	"startDate": disp_timeStart,
-	"endDate": disp_timeEnd
-}, function (start, end, label) {
-	listHistoryProduction(entityName, start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'))
-	timeStartZoom = timeStartHistory
-	timeEndZoom = timeEndHistory
-});
+	fb.onAuthStateChanged_2()
+})
+
 
 
 // Istanzia i grafici dell'attuale e dello storico
@@ -238,13 +243,13 @@ function listHistoryProduction(entityName, timeStart, timeEnd) {
 				if (typeof duration === 'undefined' || duration === null) {
 					return ''; // se il valore restituito è undefined allora il campo viene rimpiazzato con un spazio vuoto
 				}
-				
-				// Converte i millisecondi in ore e minuti 
+
+				// Converte i millisecondi in ore e minuti
 				// operazione per la conversione
 				let totalMinutes = Math.floor(duration / 60000); // Convert milliseconds to minutes
 				let hours = Math.floor(totalMinutes / 60);
 				let minutes = totalMinutes % 60;
-				
+
 				return `${hours} ore ${minutes} minuti`;
 			}
 
@@ -266,7 +271,7 @@ function listHistoryProduction(entityName, timeStart, timeEnd) {
 
 			//richiamre la funzione che converte i timestamp della durata in ore e minuti
 			let formattedDuration = formatDuration(el.ProductionDuration);
-			
+
 				let id = "IDHistoryTableRow" + i;
 				// Definisce l'html della riga da aggiungere
 				let row = '<tr id=' + id + ' class="hover_tr" style="border-style: none;background: var(--bs-table-bg);">'
@@ -313,6 +318,7 @@ function listHistoryProduction(entityName, timeStart, timeEnd) {
 					elem.dispatchEvent(clickEvent)*/
 
 			})
+			hideSpinner()
 		})
 }
 
