@@ -667,7 +667,7 @@ function getLineStenditriceInfo(entityName) {
 }
 
 // Fetch API
-// Recupera informazione del trabatoo
+// Recupera informazione del trabatto
 function getLineTrabattoInfo(entityName) {
     let url = baseUrl + "Things/Storci.Thing.Manage.Bootstrap/Services/getLineTrabattoInfo";
     let data = JSON.stringify({"entityName":entityName});
@@ -721,6 +721,44 @@ function getLineNidiLasagnaInfo(entityName) {
         }
         return response.json();
     });
+}
+
+// Fetch API
+// la funzione recupera informazione sulla macchine Impilatore
+function getLineImpilatoreInfo(entityName){
+    let url = baseUrl + "Things/Storci.Thing.Manage.Bootstrap/Services/getLineImpilatoreInfo";
+    let data = JSON.stringify({"entityName":entityName});
+
+    return fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: data
+    })
+    .then(response =>{
+        if(!response.ok){
+            throw new Error('Network response was not ok' + response.statusText);
+        }
+        return response.json()
+    })
+}
+
+// Fetch API
+// la funzione recupera informazione sulla macchine Impilatore
+function getLineDeimpilatoreInfo(entityName){
+    let url = baseUrl + "Things/Storci.Thing.Manage.Bootstrap/Services/getLineDeimpilatoreInfo";
+    let data = JSON.stringify({"entityName":entityName});
+
+    return fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: data
+    })
+    .then(response =>{
+        if(!response.ok){
+            throw new Error('Network response was not ok' + response.statusText);
+        }
+        return response.json()
+    })
 }
 
 
@@ -779,6 +817,26 @@ function calculateConsumoImpasto(entityName, startDate, endDate) {
         return response.json();
     });
 }
+
+// Fetch API
+// Recupera il conusmo  storica dell'impasto,sfarinato, liquidi, acqua ed ecc
+function CalculateConsumoFromStreams(entityName, startDate, endDate) {
+    let url = baseUrl + "Things/Storci.Thing.Manage.Bootstrap/Services/CalculateConsumoFromStreams";
+    let data = JSON.stringify({"entityName":entityName, "startDate":startDate, "endDate":endDate});
+    
+    return fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: data
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    });
+}
+
 
 //Fectch API
 // Recupera gli allarmi attivi della linea
@@ -914,11 +972,14 @@ export{
 	getLineStenditriceInfo,
 	getLineTrabattoInfo,
 	getLineNidiLasagnaInfo,
+    getLineImpilatoreInfo,
+    getLineDeimpilatoreInfo,
 	getLineInfo,
 	getLineDoughHistoryProduction,
 	getLineAlertsActive,
 	getDryerTimeRange,
 	getLineTimeRange,
     calculateConsumo,
-    calculateConsumoImpasto
+    calculateConsumoImpasto,
+    CalculateConsumoFromStreams
 }
